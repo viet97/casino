@@ -1,7 +1,6 @@
 import React from 'react';
 import { FlatList, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
-import BaseScreen from '../BaseScreen';
 import { Images } from '../../../themes/Images';
 import { widthDevice } from '../../../utils/DeviceUtil';
 import { Colors } from '../../../themes/Colors';

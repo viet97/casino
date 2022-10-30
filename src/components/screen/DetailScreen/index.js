@@ -50,7 +50,7 @@ class DetailScreen extends BaseScreen {
         <View
           style={{
             flexDirection: "row",
-            height: 73 + insets.bottom,
+            height: 73 + (insets.bottom ? 16 : 0),
             backgroundColor: Colors.toyota
           }}>
           <Pressable
@@ -63,10 +63,7 @@ class DetailScreen extends BaseScreen {
             }}>
             <SVGIcon.fighting width={32} height={32} />
             <CustomText
-              style={{
-                color: Colors.white,
-                marginTop: 4
-              }}>
+              style={styles.bottomText}>
               CHIẾN
             </CustomText>
           </Pressable>
@@ -80,10 +77,7 @@ class DetailScreen extends BaseScreen {
             }}>
             <SVGIcon.history width={32} height={32} />
             <CustomText
-              style={{
-                color: Colors.white,
-                marginTop: 4
-              }}>
+              style={styles.bottomText}>
               LỊCH SỬ
             </CustomText>
           </Pressable>
@@ -94,6 +88,10 @@ class DetailScreen extends BaseScreen {
 }
 
 const styles = StyleSheet.create({
+  bottomText: {
+    color: Colors.white,
+    marginTop: 4
+  },
   container: {
     flex: 1,
     width: '100%',
