@@ -10,8 +10,9 @@ import CustomText from '../../common/Text';
 import SVGIcon from '../../../../assets/SVGIcon';
 import Item from './Item';
 import KeyboardScrollView from '../../element/KeyboardScrollView';
+import BaseElement from '../../element/BaseElement';
 
-class SplashScreen extends BaseScreen {
+class SplashScreen extends BaseElement {
   constructor(props) {
     super(props);
     this.state = {};

@@ -9,6 +9,7 @@ import CustomText from '../../common/Text';
 import SVGIcon from '../../../../assets/SVGIcon';
 import KeyboardScrollView from '../../element/KeyboardScrollView';
 import { Row, Table } from 'react-native-table-component';
+import BaseElement from '../../element/BaseElement';
 
 const tableData = [
   [0, 3, 4, 5, 6, 7, 7, 9, 0],
@@ -36,7 +37,7 @@ const tableData = [
 
 const width = widthDevice / 6
 
-class HistoryScreen extends BaseScreen {
+class HistoryScreen extends BaseElement {
   constructor(props) {
     super(props);
     this.state = {
@@ -87,9 +88,6 @@ class HistoryScreen extends BaseScreen {
     const { widthArr, tableHead } = this.state
     return (
       <ScrollView
-        style={{
-          marginBottom: 24
-        }}
         horizontal>
         <View>
           <Table borderStyle={styles.borderStyle}>
