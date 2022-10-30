@@ -55,6 +55,7 @@
     "react-native-share": "^4.1.0",
     "react-native-static-safe-area-insets": "^2.2.0",
     "react-native-svg": "^12.1.1",
+    "react-native-table-component": "^1.2.2",
     "react-native-vector-icons": "7.1.0"
   },
   "devDependencies": {

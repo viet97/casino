@@ -4,11 +4,32 @@ import { Colors } from '../../../themes/Colors';
 import CustomText from '../../common/Text';
 import SVGIcon from '../../../../assets/SVGIcon';
 import BaseElement from '../../element/BaseElement';
+import { isNumber } from 'lodash';
 
 class Item extends BaseElement {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            value: ""
+        };
+    }
+
+    onIncrease = () => {
+        const { value } = this.state
+        if (isNumber(Number(value))) {
+            this.setStateSafe({ value: `${Number(value) + 1}` })
+            return
+        }
+        this.setStateSafe({ value: "1" })
+    }
+
+    onDecrease = () => {
+        const { value } = this.state
+        if (isNumber(Number(value))) {
+            this.setStateSafe({ value: `${Number(value) - 1}` })
+            return
+        }
+        this.setStateSafe({ value: "-1" })
     }
 
     renderContent = () => {
@@ -26,13 +47,18 @@ class Item extends BaseElement {
                         flexDirection: "row",
                         alignItems: 'center'
                     }}>
-                    <Pressable>
+                    <Pressable
+                        onPress={this.onIncrease}>
                         <SVGIcon.up width={24} height={24} />
                     </Pressable>
                     <TextInput
+                        onChangeText={value => this.setStateSafe({ value })}
+                        value={this.state.value}
+                        keyboardType='number-pad'
                         style={styles.input}
                     />
-                    <Pressable>
+                    <Pressable
+                        onPress={this.onDecrease}>
                         <SVGIcon.down width={24} height={24} />
                     </Pressable>
                 </View>

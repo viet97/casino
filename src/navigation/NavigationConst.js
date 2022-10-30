@@ -1,3 +1,4 @@
+import HistoryScreen from '../components/screen/HistoryScreen';
 import SplashScreen from '../components/screen/SplashScreen';
 
 export const ROUTER_NAME = {
@@ -5,5 +6,10 @@ export const ROUTER_NAME = {
     title: 'Splash',
     name: 'SplashScreen',
     component: SplashScreen,
+  },
+  HISTORY: {
+    title: 'History',
+    name: 'HistoryScreen',
+    component: HistoryScreen,
   },
 };

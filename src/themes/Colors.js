@@ -26,5 +26,8 @@ export const Colors = {
   violet: "#e343ba",
   toyota: "#21077c",
   approxAqua: "#02ffff",
-  briggs: "#020227"
+  briggs: "#020227",
+  paleGrey: "#00f",
+  kode: "#201d76",
+  green: "#0f4;"
 };

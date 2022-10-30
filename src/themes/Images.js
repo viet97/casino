@@ -41,6 +41,10 @@ const DEFINE_REQUIRE = {
     source: require('../../assets/images/top_cover.gif'),
     type: TYPE_IMAGE.PNG,
   },
+  history_cover: {
+    source: require('../../assets/images/history_cover.gif'),
+    type: TYPE_IMAGE.PNG,
+  },
 };
 
 export const Images = {

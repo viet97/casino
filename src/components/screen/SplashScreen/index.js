@@ -9,6 +9,7 @@ import { Colors } from '../../../themes/Colors';
 import CustomText from '../../common/Text';
 import SVGIcon from '../../../../assets/SVGIcon';
 import Item from './Item';
+import KeyboardScrollView from '../../element/KeyboardScrollView';
 
 class SplashScreen extends BaseScreen {
   constructor(props) {
@@ -28,16 +29,17 @@ class SplashScreen extends BaseScreen {
   }
 
   renderList = () => {
-    return <View
+    return <KeyboardScrollView
       style={{
         flex: 1,
       }}>
       <FlatList
-        data={[{}, {}, {}, {}, {}, {},]}
+        bounces={false}
+        data={[{}, {}, {}, {}, {}, {}]}
         style={styles.list}
         renderItem={this.renderItem}
       />
-    </View>
+    </KeyboardScrollView>
   }
 
   renderFooter = () => {

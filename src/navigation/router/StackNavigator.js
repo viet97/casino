@@ -16,7 +16,7 @@ const AppStack = () => {
         animationEnabled: true,
         gestureDirection: 'horizontal',
       }}
-      initialRouteName={ROUTER_NAME.SPLASH.name}>
+      initialRouteName={ROUTER_NAME.HISTORY.name}>
       {Object.values(ROUTER_NAME).map(screen => {
         return <Stack.Screen key={screen.name} {...screen} />;
       })}
