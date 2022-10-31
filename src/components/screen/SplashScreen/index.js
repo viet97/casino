@@ -11,7 +11,7 @@ import SVGIcon from '../../../../assets/SVGIcon';
 import Item from './Item';
 import KeyboardScrollView from '../../element/KeyboardScrollView';
 import BaseElement from '../../element/BaseElement';
-import { cloneDeep, isNumber } from 'lodash';
+import { cloneDeep, filter, isNumber } from 'lodash';
 import FireStoreModule from '../../../modules/FireStoreModule';
 
 class SplashScreen extends BaseElement {
@@ -69,11 +69,18 @@ class SplashScreen extends BaseElement {
 
   addMatch = async () => {
     let zeroSum = 0;
+    let hasEdited = false
     for (const key in this.match) {
       if (Object.hasOwnProperty.call(this.match, key)) {
         const memberScore = this.match[key];
+        if (memberScore) {
+          hasEdited = true
+        }
         zeroSum += memberScore
       }
+    }
+    if (!hasEdited) {
+      return
     }
     if (zeroSum !== 0) {
       return NavigationService.getInstance().showToast({ message: "Tổng chưa bằng 0" })
@@ -83,12 +90,12 @@ class SplashScreen extends BaseElement {
       this.match,
       ...(newGame.matches || [])
     ]
-    for (const ref of this.listRef) {
-      ref.current.clearData()
-    }
+
     try {
-      const response = await FireStoreModule.updateGame(newGame)
-      console.log("updateGame success", response)
+      FireStoreModule.updateGame(newGame)
+      for (const ref of this.listRef) {
+        ref.current.clearData()
+      }
     } catch (e) {
       console.error("update game error:", e)
     }
@@ -120,6 +127,11 @@ class SplashScreen extends BaseElement {
       <View
         style={styles.footerButtonContainer}>
         <Pressable
+          onPress={() => {
+            for (const ref of this.listRef) {
+              ref.current.clearData()
+            }
+          }}
           hitSlop={16}>
           <SVGIcon.cancel width={32} height={32} />
         </Pressable>

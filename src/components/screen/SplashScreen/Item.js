@@ -39,6 +39,7 @@ class Item extends BaseElement {
 
     clearData = () => {
         this.setStateSafe({ value: "0" })
+        this.props.onChangeValue(0)
     }
 
     setZeroSum = () => {

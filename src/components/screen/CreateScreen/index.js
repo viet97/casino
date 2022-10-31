@@ -47,14 +47,23 @@ class CreateScreen extends BaseScreen {
     const { name, tags } = this.state
     const id = uuidv4()
     try {
-
       const response = await FireStoreModule.addGame({
         name,
         id,
         members: tags.tagsArray,
         matches: []
       })
-      console.log("createGame", response)
+      NavigationService.getInstance().navigate({
+        routerName: ROUTER_NAME.DETAIL.name, params: {
+          game: {
+            name,
+            id,
+            members: tags.tagsArray,
+            matches: [],
+            uid: FireStoreModule.uid
+          }
+        }
+      })
     } catch (e) {
       console.error("create game error:", e)
     }

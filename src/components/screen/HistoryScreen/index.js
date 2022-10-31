@@ -10,40 +10,59 @@ import KeyboardScrollView from '../../element/KeyboardScrollView';
 import { Row, Table } from 'react-native-table-component';
 import BaseElement from '../../element/BaseElement';
 
-const tableData = [
-  [0, 3, 4, 5, 6, 7, 7, 9, 0],
-  [0, 3, -2, 5, 6, 7, 0, 9, 0],
-  [0, -3, 4, 4, 6, 0, 7, 9, 0],
-  [0, 3, 4, 3, 5, 7, 7, 9, 0],
-  [0, 7, 4, 3, 6, 0, 7, 9, 0],
-  [0, 3, -4, 5, 6, 7, 0, 9, 0],
-  [0, 3, -4, 5, 6, 7, 0, 9, 0],
-  [0, 3, -4, 5, 6, -7, 0, 9, 0],
-  [0, 3, 4, 5, 6, 7, 0, 9, 0],
-  [0, 3, 4, 5, 6, 7, 0, 9, 0],
-  [0, 3, 4, 5, 6, 7, 0, 9, 0],
-  [0, 3, 4, 5, 6, 7, 0, -9, 0],
-  [0, 3, 4, 5, 6, 7, 0, 9, 0],
-  [0, 3, 4, 5, 6, 7, 0, -9, 0],
-  [0, 3, -4, 5, 6, 7, 0, -9, 0],
-  [0, 3, 4, 5, 6, 7, 0, 9, 0],
-  [0, 3, 4, 5, 6, 7, 0, 9, 0],
-  [0, 3, 4, -5, 6, 7, 0, 9, 0],
-  [0, 3, 4, -5, 6, 7, 0, 9, 0],
-  [0, 3, 4, 5, 6, 7, 0, -9, 0],
-  [0, 3, 4, 5, 6, 7, 0, 9, 0],
-]
-
-const width = widthDevice / 6
-
 class HistoryScreen extends BaseElement {
   constructor(props) {
     super(props);
+    this.width = (widthDevice - (this.props.game.members.length - 1)) / this.props.game.members.length
+    if (this.width < 100) {
+      this.width = 100
+    }
     this.state = {
-      tableHead: ['Head', 'Head2', 'Head3', 'Head4', 'Head5', 'Head6', 'Head7', 'Head8', 'Head9'],
-      widthArr: [width, width, width, width, width, width, width, width, width]
+      widthArr: this.props.game.members.map(() => this.width)
     };
     this.displayName = 'HistoryScreen';
+  }
+
+  getTableHead = () => {
+    return this.props?.game?.members.map((name, index) => {
+      let sum = 0
+      for (const match of this.props?.game?.matches) {
+        sum += match[name]
+      }
+      return <View
+        style={styles.tableHead}>
+        <CustomText
+          size={10}>
+          {name}
+        </CustomText>
+        <CustomText
+          size={12}>
+          {sum}
+        </CustomText>
+      </View>
+    })
+  }
+
+  getTableData = () => {
+    return this.props.game.matches.map((match) => {
+      return Object.values(match).map(score => {
+        let color = Colors.white
+        if (score > 0) {
+          color = Colors.green
+        }
+        if (score < 0) {
+          color = "red"
+        }
+        return <CustomText
+          style={{
+            textAlign: "center",
+            color
+          }}
+          size={10}>
+          {score || "-"}
+        </CustomText>
+      })
+    })
   }
 
   _componentDidMount() {
@@ -69,14 +88,14 @@ class HistoryScreen extends BaseElement {
       <View
         style={styles.footerButtonContainer}>
         <Pressable
-          hitSlop={16}>
+          hitSlop={24}>
           <SVGIcon.ticked width={32} height={32} />
         </Pressable>
       </View>
       <View
         style={styles.footerButtonContainer}>
         <Pressable
-          hitSlop={16}>
+          hitSlop={24}>
           <SVGIcon.cancel width={32} height={32} />
         </Pressable>
       </View>
@@ -84,16 +103,16 @@ class HistoryScreen extends BaseElement {
   }
 
   renderTable = () => {
-    const { widthArr, tableHead } = this.state
+    const { widthArr } = this.state
     return (
       <ScrollView
         horizontal>
         <View>
           <Table borderStyle={styles.borderStyle}>
             <Row
-              data={tableHead}
+              data={this.getTableHead()}
               widthArr={widthArr}
-              style={{ height: 30 }}
+              style={{ height: 60 }}
               textStyle={{
                 fontSize: 12,
                 color: Colors.white,
@@ -105,7 +124,7 @@ class HistoryScreen extends BaseElement {
             style={styles.dataWrapper}>
             <Table borderStyle={styles.borderStyle}>
               {
-                tableData.map((rowData, index) => (
+                this.getTableData().map((rowData, index) => (
                   <Row
                     key={index}
                     data={rowData}
@@ -153,6 +172,11 @@ class HistoryScreen extends BaseElement {
 }
 
 const styles = StyleSheet.create({
+  tableHead: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: 'center'
+  },
   borderStyle: { borderWidth: 1, borderColor: Colors.paleGrey },
   subTitle: {
     color: Colors.white,

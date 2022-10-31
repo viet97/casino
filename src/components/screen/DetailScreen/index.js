@@ -57,7 +57,8 @@ class DetailScreen extends BaseScreen {
             style={{
               flex: 1
             }}>
-            <HistoryScreen />
+            <HistoryScreen
+              game={game} />
           </View>
         </ScrollableTabView>
         <View
