@@ -57,6 +57,7 @@ class SplashScreen extends BaseElement {
         flex: 1,
       }}>
       <FlatList
+        keyboardShouldPersistTaps={"handled"}
         bounces={false}
         data={this.props.game?.members}
         style={styles.list}

@@ -68,6 +68,12 @@ class Item extends BaseElement {
                         <SVGIcon.up width={24} height={24} />
                     </Pressable>
                     <Input
+                        onBlur={e => {
+                            if (isNaN(Number(e.nativeEvent.text)) || !Number(e.nativeEvent.text)) {
+                                this.setStateSafe({ value: "0" })
+                                this.props.onChangeValue(0)
+                            }
+                        }}
                         onChangeText={value => {
                             this.setStateSafe({ value })
                             this.props.onChangeValue(Number(value))
