@@ -55,7 +55,7 @@ CustomText.defaultProps = {
 
 const styles = StyleSheet.create({
   defaultText: {
-    color: Colors.black,
+    color: Colors.white,
   },
 });
 

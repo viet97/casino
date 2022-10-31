@@ -15,7 +15,6 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import NavigationService from '../navigation/NavigationService';
 import LoadingManager from '../components/element/Loading/LoadingManager';
 import Config from '../Config';
-import codePush from 'react-native-code-push';
 import { AppState } from 'react-native';
 import AppStateModule from '../modules/AppStateModule';
 

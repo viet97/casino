@@ -5,6 +5,14 @@ import history from './history.svg';
 import ticked from './ticked.svg';
 import up from './up.svg';
 import zerosum from './zerosum.svg';
+import back from './back.svg';
+import crown from './crown.svg';
+import deleteIcon from './delete.svg';
+import help from './help.svg';
+import item_cover from './item_cover.svg';
+import list_cover from './list_cover.svg';
+import scanner from './scanner.svg';
+import start_game from './start_game.svg';
 
 export default {
   cancel,
@@ -13,5 +21,13 @@ export default {
   history,
   ticked,
   up,
-  zerosum
+  zerosum,
+  back,
+  crown,
+  deleteIcon,
+  help,
+  item_cover,
+  list_cover,
+  scanner,
+  start_game
 };

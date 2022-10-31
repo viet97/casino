@@ -16,6 +16,7 @@ export const DEFINE_KEY = {
   IS_DEPLOY: md5Key('isDeploy' + server.secret),
   // refresh
   ACCESS_TOKEN: md5Key('access_token' + server.secret),
+  LIST_GAME: md5Key('LIST_GAME' + server.secret),
 };
 
 const isExist = async key => {
