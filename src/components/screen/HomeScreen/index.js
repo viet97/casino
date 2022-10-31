@@ -10,6 +10,7 @@ import SVGIcon from '../../../../assets/SVGIcon';
 import LinearGradient from 'react-native-linear-gradient';
 import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
+import LocalStorage from '../../../modules/LocalStorage';
 
 const COVER_HEIGHT = widthDevice * 260 / 393
 
@@ -17,15 +18,24 @@ class HomeScreen extends BaseScreen {
   constructor(props) {
     super(props);
     this.state = {
+      listItem: []
     };
 
     this.displayName = 'HomeScreen';
   }
 
   renderItem = ({ item, index }) => {
+    const { member, name } = item
+    const membersNameString = member.join(", ")
     return (
       <Pressable
-        onPress={() => NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.DETAIL.name })}
+        onPress={() => NavigationService.getInstance().navigate({
+          routerName: ROUTER_NAME.DETAIL.name,
+          params: {
+            item,
+            listGame: this.state.listGame
+          }
+        })}
         style={styles.item}>
         <View
           style={styles.itemContentContainer}>
@@ -37,14 +47,14 @@ class HomeScreen extends BaseScreen {
           <CustomText
             numberOfLines={2}
             style={styles.itemName}>
-            Bida Pod Foods
+            {name}
           </CustomText>
           <View
             style={styles.itemBottomRow}>
             <CustomText
               style={styles.itemMembers}
               size={11}>
-              Gia, Trí, Việt, Khang, Tân, Thiêm, Thắng, Hiệp, Mạnh,123,123,12,312
+              {membersNameString}
             </CustomText>
             <Pressable
               hitSlop={16}>
@@ -59,8 +69,9 @@ class HomeScreen extends BaseScreen {
   renderList = () => {
     return (
       <FlatList
-        data={[{}, {}, {}, {}, {}, {},]}
+        data={this.state.listGame}
         renderItem={this.renderItem}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContentContainer}
         style={styles.list}
       />
@@ -79,7 +90,12 @@ class HomeScreen extends BaseScreen {
           />
         </Pressable>
         <Pressable
-          onPress={() => NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.CREATE_GAME.name })}
+          onPress={() => NavigationService.getInstance().navigate({
+            routerName: ROUTER_NAME.CREATE_GAME.name,
+            params: {
+              listGame: this.state.listGame
+            }
+          })}
           style={styles.createGameButton}>
           <Image
             style={styles.scannerIcon}
@@ -93,6 +109,13 @@ class HomeScreen extends BaseScreen {
         </Pressable>
       </LinearGradient>
     )
+  }
+
+  _componentDidMount() {
+    LocalStorage.getItem(LocalStorage.DEFINE_KEY.LIST_GAME).then((listGame) => {
+      const listGameArray = JSON.parse(listGame)
+      this.setStateSafe({ listGame: listGameArray })
+    })
   }
 
   renderContent() {

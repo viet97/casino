@@ -12,6 +12,10 @@ import Input from '../../common/Input';
 import moment from 'moment';
 import { size, trim } from 'lodash';
 import TagInput from 'react-native-tags-input';
+import { v4 as uuidv4 } from 'uuid';
+import LocalStorage from '../../../modules/LocalStorage';
+import NavigationService from '../../../navigation/NavigationService';
+import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 
 class CreateScreen extends BaseScreen {
   constructor(props) {
@@ -26,15 +30,29 @@ class CreateScreen extends BaseScreen {
       },
     };
     this.displayName = 'CreateScreen';
+    this.listGame = props.route?.params?.listGame || []
   }
 
   _componentDidMount() {
   }
 
   isValidate = () => {
-    const { name, listMember } = this.state
-    if (size(listMember) >= 2 && !trim(name)) return true
+    const { name, tags } = this.state
+    if (size(tags?.tagsArray) >= 2 && trim(name)) return true
     return false
+  }
+
+  createGame = async () => {
+    const { name, tags } = this.state
+    const id = uuidv4()
+    await LocalStorage.setItem(LocalStorage.DEFINE_KEY.LIST_GAME, [{
+      id,
+      name,
+      member: tags.tagsArray,
+      tableScore: []
+    },
+    ...this.listGame])
+    NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.DETAIL.name })
   }
 
   renderBottom = () => {
@@ -43,7 +61,8 @@ class CreateScreen extends BaseScreen {
         style={styles.bottom}
         start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={['#05131C', "rgba(5, 19, 28, 0)"]} >
         <Pressable
-          onPress={() => NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.CREATE_GAME.name })}
+          disabled={!this.isValidate()}
+          onPress={this.createGame}
           style={styles.createGameButton}>
           <Image
             style={[styles.scannerIcon, {
