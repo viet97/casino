@@ -1,0 +1,165 @@
+diff --git a/node_modules/react-native-tags-input/index.js b/node_modules/react-native-tags-input/index.js
+index 67bbc0c..f947ccf 100644
+--- a/node_modules/react-native-tags-input/index.js
++++ b/node_modules/react-native-tags-input/index.js
+@@ -35,25 +35,25 @@ class Tags extends React.Component {
+   renderLabel = (text, style) => {
+     return (
+       <Text style={style}>
+-      {text}
++        {text}
+       </Text>
+-  )
++    )
+   };
+ 
+   renderLeftElement = (element, style) => {
+     return (
+       <View style={StyleSheet.flatten([styles.leftElement, style])}>
+-      {element}
++        {element}
+       </View>
+-  )
++    )
+   };
+ 
+   renderRightElement = (element, style) => {
+     return (
+       <View style={StyleSheet.flatten([styles.rightElement, style])}>
+-      {element}
++        {element}
+       </View>
+-  )
++    )
+   };
+ 
+   // If characters remain in the input field after input is completed, add them to the tag.
+@@ -105,7 +105,7 @@ class Tags extends React.Component {
+   onChangeText2 = (text, tags, updateState, keysForTagsArray) => {
+ 
+     // Escaping special characters.
+-    const keys = keysForTagsArray.map((str) => (str+'').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1"));
++    const keys = keysForTagsArray.map((str) => (str + '').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1"));
+ 
+     const regexp = new RegExp(keys.join('|'));
+ 
+@@ -170,56 +170,66 @@ class Tags extends React.Component {
+       deleteElement,
+       deleteIconStyles,
+       customElement,
++      renderTag
+     } = this.props;
+ 
+     const props = this.props;
+     return (
+       <View style={StyleSheet.flatten([styles.container, containerStyle])}>
+-      {label ? this.renderLabel(label, StyleSheet.flatten([styles.labelStyle, labelStyle])) : null}
++        {label ? this.renderLabel(label, StyleSheet.flatten([styles.labelStyle, labelStyle])) : null}
+         <View style={StyleSheet.flatten(StyleSheet.flatten([styles.inputContainer, inputContainerStyle]))}>
+-          {leftElement ? this.renderLeftElement(leftElement, leftElementContainerStyle) : null}
++          {/* {leftElement ? this.renderLeftElement(leftElement, leftElementContainerStyle) : null} */}
+           <TextInput
+             underlineColorAndroid="transparent"
+             editable={!disabled}
+             ref={ref => {
+               this.input = ref;
+             }}
++            placeholderTextColor="rgba(255,255,255,0.5)"
+             style={StyleSheet.flatten([
+-                styles.input,
+-                inputStyle,
+-                disabled && styles.disabledInput,
+-                disabled && disabledInputStyle,
+-              ])}
++              styles.input,
++              inputStyle,
++              disabled && styles.disabledInput,
++              disabled && disabledInputStyle,
++            ])}
+             {...props}
+             value={tags.tag}
+             onChangeText={text => this.onChangeText(text, tags, updateState, keysForTag, keysForTagsArray)}
+             onEndEditing={() => this.onEndEditing(tags, updateState)}
+-        />
+-        {rightElement ? this.renderRightElement(rightElement, rightElementContainerStyle) : null}
+-      </View>
+-        {customElement ? customElement : null}
+-      <View style={StyleSheet.flatten([styles.tagsView, tagsViewStyle])}>
+-        {tags.tagsArray.map((item, count) => {
+-            return (
+-              <View
+-                style={StyleSheet.flatten([styles.tag, tagStyle])}
+-                key={count}
+-              >
+-              <Text style={StyleSheet.flatten([styles.tagText, tagTextStyle])}>{item}</Text>
+-              <TouchableOpacity onPressIn={() => this.deleteTag(count, tags, updateState) }>
+-                  {deleteElement ? deleteElement : (
+-                    <Image
+-                      source={require('./assets/close.png')}
+-                      style={StyleSheet.flatten([styles.deleteIcon, deleteIconStyles])}
+-                    />
+-                  )}
+-            </TouchableOpacity>
+-            </View>
+-          )
+-          })}
++          />
++          {/* {rightElement ? this.renderRightElement(rightElement, rightElementContainerStyle) : null} */}
+         </View>
++        {customElement ? customElement : null}
++
++        {
++          tags?.tagsArray?.length ?
++            <View style={StyleSheet.flatten([styles.tagsView, tagsViewStyle])}>
++              {tags.tagsArray.map((item, count) => {
++                if (renderTag) return renderTag({
++                  item,
++                  count,
++                  deleteTag: () => this.deleteTag(count, tags, updateState)
++                })
++                return (
++                  <View
++                    style={StyleSheet.flatten([styles.tag, tagStyle])}
++                    key={count}
++                  >
++                    <Text style={StyleSheet.flatten([styles.tagText, tagTextStyle])}>{item}</Text>
++                    <TouchableOpacity onPressIn={() => this.deleteTag(count, tags, updateState)}>
++                      {deleteElement ? deleteElement : (
++                        <Image
++                          source={require('./assets/close.png')}
++                          style={StyleSheet.flatten([styles.deleteIcon, deleteIconStyles])}
++                        />
++                      )}
++                    </TouchableOpacity>
++                  </View>
++                )
++              })}
++            </View> : null}
+       </View>
+-  );
++    );
+   }
+ }
+ 
+@@ -246,7 +256,6 @@ Tags.propTypes = {
+ const styles = {
+   container: {
+     width: '100%',
+-    paddingHorizontal: 10,
+   },
+   disabledInput: {
+     opacity: 0.5,
+@@ -270,12 +279,9 @@ const styles = {
+     color: 'black',
+     fontSize: 18,
+     flex: 1,
+-    minHeight: 40,
+-    marginLeft: 5,
+-    marginRight: 5,
++    minHeight: 30,
+   },
+   tagsView: {
+-    marginTop: 10,
+     flexDirection: 'row',
+     justifyContent: 'flex-start',
+     flexWrap: 'wrap',

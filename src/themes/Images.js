@@ -53,6 +53,18 @@ const DEFINE_REQUIRE = {
     source: require('../../assets/images/create_game_bg.png'),
     type: TYPE_IMAGE.PNG,
   },
+  start_game_cover: {
+    source: require('../../assets/images/start_game_cover.png'),
+    type: TYPE_IMAGE.PNG,
+  },
+  create_cover: {
+    source: require('../../assets/images/create_cover.gif'),
+    type: TYPE_IMAGE.PNG,
+  },
+  home_cover: {
+    source: require('../../assets/images/home_cover.gif'),
+    type: TYPE_IMAGE.PNG,
+  },
 };
 
 export const Images = {

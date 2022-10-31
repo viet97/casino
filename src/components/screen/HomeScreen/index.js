@@ -79,6 +79,7 @@ class HomeScreen extends BaseScreen {
           />
         </Pressable>
         <Pressable
+          onPress={() => NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.CREATE_GAME.name })}
           style={styles.createGameButton}>
           <Image
             style={styles.scannerIcon}
@@ -100,7 +101,7 @@ class HomeScreen extends BaseScreen {
         <View
           style={styles.topCoverContainer}>
           <Image
-            source={Images.assets.top_cover.source}
+            source={Images.assets.home_cover.source}
             style={styles.cover}
           />
           <CustomText
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.nero
   },
   cover: {
-    resizeMode: "contain",
+    resizeMode: "stretch",
     width: widthDevice,
     height: COVER_HEIGHT,
   },

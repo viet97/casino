@@ -8,6 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
+    "postinstall": "patch-package",
     "codepush-all": "appcenter codepush release-react -a podfoodsco/podfoods-ios -d Staging && appcenter codepush release-react -a podfoodsco/podfoods-android -d Staging"
   },
   "dependencies": {
@@ -56,6 +57,7 @@
     "react-native-static-safe-area-insets": "^2.2.0",
     "react-native-svg": "^12.1.1",
     "react-native-table-component": "^1.2.2",
+    "react-native-tags-input": "^1.0.10",
     "react-native-vector-icons": "7.1.0"
   },
   "devDependencies": {

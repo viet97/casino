@@ -58,10 +58,8 @@ class AppNavigator extends BaseElement {
 
   _onStateChange = async state => {
     const previousRouteName = this.navigation.getCurrentRoute();
-    this._debugLog('--_onStateChange---', state, previousRouteName);
     const currentRouteName = this.getActiveRouteName(state);
     NavigationService.getInstance().setCurrentScreen(currentRouteName);
-    this._debugLog('currentScreen', currentRouteName);
     EmitterManager.getInstance().emit(EmitterManager.listEvent.CHANGE_SCREEN, currentRouteName);
   };
 
