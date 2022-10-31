@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import LocalStorage from '../../../modules/LocalStorage';
 import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
+import FireStoreModule from '../../../modules/FireStoreModule';
 
 class CreateScreen extends BaseScreen {
   constructor(props) {
@@ -45,14 +46,19 @@ class CreateScreen extends BaseScreen {
   createGame = async () => {
     const { name, tags } = this.state
     const id = uuidv4()
-    await LocalStorage.setItem(LocalStorage.DEFINE_KEY.LIST_GAME, [{
-      id,
-      name,
-      member: tags.tagsArray,
-      tableScore: []
-    },
-    ...this.listGame])
-    NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.DETAIL.name })
+    try {
+
+      const response = await FireStoreModule.addGame({
+        name,
+        id,
+        members: tags.tagsArray,
+        matches: []
+      })
+      console.log("createGame", response)
+    } catch (e) {
+      console.error("create game error:", e)
+    }
+    // NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.DETAIL.name })
   }
 
   renderBottom = () => {

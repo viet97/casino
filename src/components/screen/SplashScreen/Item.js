@@ -11,7 +11,7 @@ class Item extends BaseElement {
     constructor(props) {
         super(props);
         this.state = {
-            value: ""
+            value: "0"
         };
     }
 
@@ -19,30 +19,45 @@ class Item extends BaseElement {
         const { value } = this.state
         if (isNumber(Number(value))) {
             this.setStateSafe({ value: `${Number(value) + 1}` })
+            this.props.onChangeValue(Number(value) + 1)
             return
         }
         this.setStateSafe({ value: "1" })
+        this.props.onChangeValue(1)
     }
 
     onDecrease = () => {
         const { value } = this.state
         if (isNumber(Number(value))) {
             this.setStateSafe({ value: `${Number(value) - 1}` })
+            this.props.onChangeValue(Number(value) - 1)
             return
         }
         this.setStateSafe({ value: "-1" })
+        this.props.onChangeValue(-1)
+    }
+
+    clearData = () => {
+        this.setStateSafe({ value: "0" })
+    }
+
+    setZeroSum = () => {
+        const otherValue = this.props.getOtherValue(this.props.item)
+        this.setStateSafe({ value: `${otherValue}` })
+        this.props.onChangeValue(otherValue)
     }
 
     renderContent = () => {
-        const { item, index } = this.props
+        const { item } = this.props
         return (
             <View
                 style={styles.container}>
-                <Pressable>
+                <Pressable
+                    onPress={this.setZeroSum}>
                     <SVGIcon.zerosum width={28} height={28} />
                 </Pressable>
                 <CustomText
-                    style={styles.playerName}>Việt</CustomText>
+                    style={styles.playerName}>{item}</CustomText>
                 <View
                     style={{
                         flexDirection: "row",
@@ -53,9 +68,11 @@ class Item extends BaseElement {
                         <SVGIcon.up width={24} height={24} />
                     </Pressable>
                     <Input
-                        onChangeText={value => this.setStateSafe({ value })}
+                        onChangeText={value => {
+                            this.setStateSafe({ value })
+                            this.props.onChangeValue(Number(value))
+                        }}
                         value={this.state.value}
-                        keyboardType='number-pad'
                         style={styles.input}
                     />
                     <Pressable

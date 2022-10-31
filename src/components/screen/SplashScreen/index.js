@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 
 import BaseScreen from '../BaseScreen';
@@ -11,6 +11,8 @@ import SVGIcon from '../../../../assets/SVGIcon';
 import Item from './Item';
 import KeyboardScrollView from '../../element/KeyboardScrollView';
 import BaseElement from '../../element/BaseElement';
+import { cloneDeep, isNumber } from 'lodash';
+import FireStoreModule from '../../../modules/FireStoreModule';
 
 class SplashScreen extends BaseElement {
   constructor(props) {
@@ -18,6 +20,18 @@ class SplashScreen extends BaseElement {
     this.state = {};
     this.displayName = 'SplashScreen';
     NavigationService.getInstance(props.navigation)
+    this.initialMatch()
+    this.initialListRef()
+  }
+
+  initialMatch = () => {
+    this.match = {}
+    for (const member of this.props.game?.members) {
+      this.match[member] = 0
+    }
+  }
+  initialListRef = () => {
+    this.listRef = this.props.game?.members.map(() => createRef())
   }
 
   _componentDidMount() {
@@ -25,7 +39,15 @@ class SplashScreen extends BaseElement {
 
   renderItem = ({ item, index }) => {
     return (
-      <Item item={item} index={index} />
+      <Item
+        onChangeValue={(value) => {
+          this.match[item] = !isNaN(Number(value)) ? Number(value) : 0
+          console.log("this.match", this.match)
+        }}
+        getOtherValue={this.getOtherValue}
+        ref={this.listRef[index]}
+        item={item}
+        index={index} />
     )
   }
 
@@ -36,11 +58,51 @@ class SplashScreen extends BaseElement {
       }}>
       <FlatList
         bounces={false}
-        data={[{}, {}, {}, {}, {}, {}]}
+        data={this.props.game?.members}
         style={styles.list}
+        keyExtractor={(item) => item}
         renderItem={this.renderItem}
       />
     </KeyboardScrollView>
+  }
+
+  addMatch = async () => {
+    let zeroSum = 0;
+    for (const key in this.match) {
+      if (Object.hasOwnProperty.call(this.match, key)) {
+        const memberScore = this.match[key];
+        zeroSum += memberScore
+      }
+    }
+    if (zeroSum !== 0) {
+      return NavigationService.getInstance().showToast({ message: "Tổng chưa bằng 0" })
+    }
+    const newGame = cloneDeep(this.props.game)
+    newGame.matches = [
+      this.match,
+      ...(newGame.matches || [])
+    ]
+    for (const ref of this.listRef) {
+      ref.current.clearData()
+    }
+    try {
+      const response = await FireStoreModule.updateGame(newGame)
+      console.log("updateGame success", response)
+    } catch (e) {
+      console.error("update game error:", e)
+    }
+  }
+
+  getOtherValue = (item) => {
+    let otherValue = 0;
+    for (const key in this.match) {
+      if (Object.hasOwnProperty.call(this.match, key)) {
+        if (key === item) continue
+        const memberScore = this.match[key];
+        otherValue += memberScore
+      }
+    }
+    return 0 - otherValue
   }
 
   renderFooter = () => {
@@ -49,6 +111,7 @@ class SplashScreen extends BaseElement {
       <View
         style={styles.footerButtonContainer}>
         <Pressable
+          onPress={this.addMatch}
           hitSlop={16}>
           <SVGIcon.ticked width={32} height={32} />
         </Pressable>

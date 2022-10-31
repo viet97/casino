@@ -9,20 +9,31 @@ import CustomText from '../../common/Text';
 import { ScrollableTabView } from '../../common';
 import SVGIcon from '../../../../assets/SVGIcon';
 import { insets } from '../../../utils/DeviceUtil';
+import FireStoreModule from '../../../modules/FireStoreModule';
 
 class DetailScreen extends BaseScreen {
   constructor(props) {
     super(props);
     this.state = {
-      currentTab: 0
+      currentTab: 0,
+      game: this.props.route?.params?.game
     };
 
     this.displayName = 'DetailScreen';
   }
 
+  async _componentDidMount() {
+    this.gameListener = FireStoreModule.listenGameChange(this.props.route?.params?.game, game => {
+      this.setStateSafe({ game })
+    })
+  }
+
+  async _componentUnMount() {
+    this.gameListener && this.gameListener()
+  }
 
   renderContent() {
-    const { currentTab } = this.state
+    const { currentTab, game } = this.state
     return (
       <View style={styles.container}>
         <ScrollableTabView
@@ -38,7 +49,9 @@ class DetailScreen extends BaseScreen {
             style={{
               flex: 1
             }}>
-            <SplashScreen />
+            <SplashScreen
+              game={game}
+            />
           </View>
           <View
             style={{

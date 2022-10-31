@@ -10,7 +10,7 @@ import SVGIcon from '../../../../assets/SVGIcon';
 import LinearGradient from 'react-native-linear-gradient';
 import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
-import LocalStorage from '../../../modules/LocalStorage';
+import FireStoreModule from '../../../modules/FireStoreModule';
 
 const COVER_HEIGHT = widthDevice * 260 / 393
 
@@ -18,22 +18,20 @@ class HomeScreen extends BaseScreen {
   constructor(props) {
     super(props);
     this.state = {
-      listItem: []
     };
 
     this.displayName = 'HomeScreen';
   }
 
   renderItem = ({ item, index }) => {
-    const { member, name } = item
-    const membersNameString = member.join(", ")
+    const { members, name } = item
+    const membersNameString = members.join(", ")
     return (
       <Pressable
         onPress={() => NavigationService.getInstance().navigate({
           routerName: ROUTER_NAME.DETAIL.name,
           params: {
-            item,
-            listGame: this.state.listGame
+            game: item
           }
         })}
         style={styles.item}>
@@ -111,11 +109,14 @@ class HomeScreen extends BaseScreen {
     )
   }
 
-  _componentDidMount() {
-    LocalStorage.getItem(LocalStorage.DEFINE_KEY.LIST_GAME).then((listGame) => {
-      const listGameArray = JSON.parse(listGame)
-      this.setStateSafe({ listGame: listGameArray })
+  async _componentDidMount() {
+    this.gamesListener = await FireStoreModule.listenGamesChange(listGame => {
+      this.setStateSafe({ listGame })
     })
+  }
+
+  _componentUnMount() {
+    this.gamesListener && this.gamesListener()
   }
 
   renderContent() {
