@@ -29,5 +29,8 @@ export const Colors = {
   briggs: "#020227",
   paleGrey: "#00f",
   kode: "#201d76",
-  green: "#0f4;"
+  green: "#0f4",
+  nero: "#1E1E1E",
+  blackRussian: "#020221",
+  skema: "#02E0E3",
 };

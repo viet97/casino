@@ -1,102 +1,196 @@
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 
 import BaseScreen from '../BaseScreen';
 import { Colors } from '../../../themes/Colors';
-import SplashScreen from '../SplashScreen';
-import HistoryScreen from '../HistoryScreen';
+import { Images } from '../../../themes/Images';
+import { widthDevice } from '../../../utils/DeviceUtil';
 import CustomText from '../../common/Text';
-import { ScrollableTabView } from '../../common';
 import SVGIcon from '../../../../assets/SVGIcon';
-import { insets } from '../../../utils/DeviceUtil';
+import LinearGradient from 'react-native-linear-gradient';
+import NavigationService from '../../../navigation/NavigationService';
+import { ROUTER_NAME } from '../../../navigation/NavigationConst';
+
+const COVER_HEIGHT = widthDevice * 260 / 393
 
 class HomeScreen extends BaseScreen {
   constructor(props) {
     super(props);
     this.state = {
-      currentTab: 0
     };
 
     this.displayName = 'HomeScreen';
   }
 
-
-  renderContent() {
-    const { currentTab } = this.state
+  renderItem = ({ item, index }) => {
     return (
-      <View style={styles.container}>
-        <ScrollableTabView
-          renderTabBar={() => <View />}
-          ref={ref => this.scrollableTabView = ref}
-          style={{ flex: 1 }}
-          tabBarActiveTextColor={Colors.black}
-          prerenderingSiblingsNumber={0}
-          initialPage={0}
-          onChangeTab={({ i }) => this.setStateSafe({ currentTab: i })}
-        >
-          <View
-            style={{
-              flex: 1
-            }}>
-            <SplashScreen />
-          </View>
-          <View
-            style={{
-              flex: 1
-            }}>
-            <HistoryScreen />
-          </View>
-        </ScrollableTabView>
+      <Pressable
+        onPress={() => NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.DETAIL.name })}
+        style={{
+          paddingTop: 6,
+          paddingHorizontal: 20,
+          paddingBottom: 16,
+          borderWidth: 3,
+          borderColor: Colors.skema,
+          marginBottom: 16,
+          overflow: "hidden",
+        }}>
+        <Image
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            position: "absolute",
+            left: 0,
+            right: 0,
+            width: widthDevice - 48,
+            height: 90,
+            top: 0,
+            backgroundColor: Colors.nero
+          }}
+          source={Images.assets.item_cover.source}
+        />
+
+        <CustomText
+          numberOfLines={2}
+          style={{
+            letterSpacing: 0.05,
+            color: Colors.white,
+            lineHeight: 29.75
+          }}>
+          Bida Pod Foods
+        </CustomText>
         <View
           style={{
-            flexDirection: "row",
-            height: 73 + (insets.bottom ? 16 : 0),
-            backgroundColor: Colors.toyota
+            flexDirection: 'row',
+            justifyContent: 'flex-end'
           }}>
-          <Pressable
-            onPress={() => this.scrollableTabView.goToPage(0)}
+          <CustomText
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: "center",
-              backgroundColor: !currentTab ? Colors.violet : Colors.TRANSPARENT
-            }}>
-            <SVGIcon.fighting width={32} height={32} />
-            <CustomText
-              style={styles.bottomText}>
-              CHIẾN
-            </CustomText>
-          </Pressable>
+              color: Colors.white,
+              lineHeight: 18,
+              marginRight: 20,
+              flex: 1
+            }}
+            size={11}>
+            Gia, Trí, Việt, Khang, Tân, Thiêm, Thắng, Hiệp, Mạnh,123,123,12,312
+          </CustomText>
           <Pressable
-            onPress={() => this.scrollableTabView.goToPage(1)}
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: "center",
-              backgroundColor: currentTab ? Colors.violet : Colors.TRANSPARENT
-            }}>
-            <SVGIcon.history width={32} height={32} />
-            <CustomText
-              style={styles.bottomText}>
-              LỊCH SỬ
-            </CustomText>
+            hitSlop={16}>
+            <SVGIcon.help width={24} height={24} />
           </Pressable>
         </View>
+      </Pressable>
+    )
+  }
+
+  renderList = () => {
+    return (
+      <FlatList
+        data={[{}, {}, {}, {}, {}, {},]}
+        renderItem={this.renderItem}
+        contentContainerStyle={{
+          paddingTop: COVER_HEIGHT - 32,
+          paddingBottom: 100
+        }}
+        style={{
+          paddingHorizontal: 24,
+        }}
+      />
+    )
+  }
+
+  renderBottom = () => {
+    return (
+      <LinearGradient
+        style={{
+          flexDirection: "row",
+          paddingVertical: 32,
+          paddingHorizontal: 24,
+          position: 'absolute',
+          bottom: 0,
+          shadowOffset: {
+            width: 0,
+            height: 3,
+          },
+          shadowColor: Colors.black,
+          shadowRadius: 20,
+          shadowOpacity: 0.1,
+          alignItems: 'center',
+          elevation: 5,
+        }}
+        start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={['#05131C', "rgba(5, 19, 28, 0)"]} >
+        <Pressable>
+          <SVGIcon.scanner
+            width={56}
+            height={56}
+          />
+        </Pressable>
+        <Pressable
+          style={{
+            flex: 1,
+            height: 52,
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginLeft: 12,
+            justifyContent: 'center',
+            borderWidth: 3,
+            borderColor: Colors.skema,
+            backgroundColor: 'red'
+          }}>
+          <SVGIcon.crown />
+          <CustomText
+            style={{
+              letterSpacing: 0.05,
+              marginLeft: 12
+            }}>
+            Tạo trận mới
+          </CustomText>
+        </Pressable>
+      </LinearGradient>
+    )
+  }
+
+  renderContent() {
+    return (
+      <View style={styles.container}>
+        <View
+          style={{
+            justifyContent: 'center',
+            position: "absolute"
+          }}>
+          <Image
+            source={Images.assets.top_cover.source}
+            style={styles.cover}
+          />
+          <CustomText
+            size={22}
+            style={styles.title}>
+            SỔ SINH TỬ
+          </CustomText>
+        </View>
+        {this.renderList()}
+        {this.renderBottom()}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  bottomText: {
+  title: {
     color: Colors.white,
-    marginTop: 4
+    position: 'absolute',
+    alignSelf: 'center',
+    marginTop: 12
   },
   container: {
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.backgroundScreen
+    backgroundColor: Colors.nero
+  },
+  cover: {
+    resizeMode: "contain",
+    width: widthDevice,
+    height: COVER_HEIGHT,
   },
 });
 
