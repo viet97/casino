@@ -82,12 +82,26 @@ class DetailScreen extends BaseScreen {
             </CustomText>
           </Pressable>
         </View>
+
+        <Pressable
+          onPress={() => this.back()}
+          style={styles.back}>
+          <SVGIcon.back
+            width={52}
+            height={52}
+          />
+        </Pressable>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  back: {
+    position: "absolute",
+    top: 52,
+    left: 16
+  },
   bottomText: {
     color: Colors.white,
     marginTop: 4

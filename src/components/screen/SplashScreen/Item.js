@@ -5,6 +5,7 @@ import CustomText from '../../common/Text';
 import SVGIcon from '../../../../assets/SVGIcon';
 import BaseElement from '../../element/BaseElement';
 import { isNumber } from 'lodash';
+import Input from '../../common/Input';
 
 class Item extends BaseElement {
     constructor(props) {
@@ -51,7 +52,7 @@ class Item extends BaseElement {
                         onPress={this.onIncrease}>
                         <SVGIcon.up width={24} height={24} />
                     </Pressable>
-                    <TextInput
+                    <Input
                         onChangeText={value => this.setStateSafe({ value })}
                         value={this.state.value}
                         keyboardType='number-pad'

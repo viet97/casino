@@ -26,50 +26,21 @@ class HomeScreen extends BaseScreen {
     return (
       <Pressable
         onPress={() => NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.DETAIL.name })}
-        style={{
-          paddingTop: 6,
-          paddingHorizontal: 20,
-          paddingBottom: 16,
-          borderWidth: 3,
-          borderColor: Colors.skema,
-          marginBottom: 16,
-          overflow: "hidden",
-        }}>
+        style={styles.item}>
         <Image
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            position: "absolute",
-            left: 0,
-            right: 0,
-            width: widthDevice - 48,
-            height: 90,
-            top: 0,
-            backgroundColor: Colors.nero
-          }}
+          style={styles.itemBg}
           source={Images.assets.item_cover.source}
         />
 
         <CustomText
           numberOfLines={2}
-          style={{
-            letterSpacing: 0.05,
-            color: Colors.white,
-            lineHeight: 29.75
-          }}>
+          style={styles.itemName}>
           Bida Pod Foods
         </CustomText>
         <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end'
-          }}>
+          style={styles.itemBottomRow}>
           <CustomText
-            style={{
-              color: Colors.white,
-              lineHeight: 18,
-              marginRight: 20,
-              flex: 1
-            }}
+            style={styles.itemMembers}
             size={11}>
             Gia, Trí, Việt, Khang, Tân, Thiêm, Thắng, Hiệp, Mạnh,123,123,12,312
           </CustomText>
@@ -87,13 +58,8 @@ class HomeScreen extends BaseScreen {
       <FlatList
         data={[{}, {}, {}, {}, {}, {},]}
         renderItem={this.renderItem}
-        contentContainerStyle={{
-          paddingTop: COVER_HEIGHT - 32,
-          paddingBottom: 100
-        }}
-        style={{
-          paddingHorizontal: 24,
-        }}
+        contentContainerStyle={styles.listContentContainer}
+        style={styles.list}
       />
     )
   }
@@ -101,22 +67,7 @@ class HomeScreen extends BaseScreen {
   renderBottom = () => {
     return (
       <LinearGradient
-        style={{
-          flexDirection: "row",
-          paddingVertical: 32,
-          paddingHorizontal: 24,
-          position: 'absolute',
-          bottom: 0,
-          shadowOffset: {
-            width: 0,
-            height: 3,
-          },
-          shadowColor: Colors.black,
-          shadowRadius: 20,
-          shadowOpacity: 0.1,
-          alignItems: 'center',
-          elevation: 5,
-        }}
+        style={styles.bottom}
         start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={['#05131C', "rgba(5, 19, 28, 0)"]} >
         <Pressable>
           <SVGIcon.scanner
@@ -125,23 +76,14 @@ class HomeScreen extends BaseScreen {
           />
         </Pressable>
         <Pressable
-          style={{
-            flex: 1,
-            height: 52,
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginLeft: 12,
-            justifyContent: 'center',
-            borderWidth: 3,
-            borderColor: Colors.skema,
-            backgroundColor: 'red'
-          }}>
+          style={styles.scanner}>
+          <Image
+            style={styles.scannerIcon}
+            source={Images.assets.create_game_bg.source}
+          />
           <SVGIcon.crown />
           <CustomText
-            style={{
-              letterSpacing: 0.05,
-              marginLeft: 12
-            }}>
+            style={styles.createGame}>
             Tạo trận mới
           </CustomText>
         </Pressable>
@@ -153,10 +95,7 @@ class HomeScreen extends BaseScreen {
     return (
       <View style={styles.container}>
         <View
-          style={{
-            justifyContent: 'center',
-            position: "absolute"
-          }}>
+          style={styles.topCoverContainer}>
           <Image
             source={Images.assets.top_cover.source}
             style={styles.cover}
@@ -175,6 +114,86 @@ class HomeScreen extends BaseScreen {
 }
 
 const styles = StyleSheet.create({
+  topCoverContainer: {
+    justifyContent: 'center',
+    position: "absolute"
+  },
+  createGame: {
+    letterSpacing: 0.05,
+    marginLeft: 12
+  },
+  scannerIcon: {
+    position: 'absolute',
+    resizeMode: "cover"
+  },
+  scanner: {
+    flex: 1,
+    height: 52,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 12,
+    justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: Colors.skema,
+    overflow: 'hidden'
+  },
+  bottom: {
+    flexDirection: "row",
+    paddingVertical: 32,
+    paddingHorizontal: 24,
+    position: 'absolute',
+    bottom: 0,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowColor: Colors.black,
+    shadowRadius: 20,
+    shadowOpacity: 0.1,
+    alignItems: 'center',
+    elevation: 5,
+  },
+  list: {
+    paddingHorizontal: 24,
+  },
+  listContentContainer: {
+    paddingTop: COVER_HEIGHT - 32,
+    paddingBottom: 100
+  },
+  itemMembers: {
+    color: Colors.white,
+    lineHeight: 18,
+    marginRight: 20,
+    flex: 1
+  },
+  itemBottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
+  },
+  itemName: {
+    letterSpacing: 0.05,
+    color: Colors.white,
+    lineHeight: 29.75
+  },
+  itemBg: {
+    ...StyleSheet.absoluteFillObject,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    width: widthDevice - 48,
+    height: 90,
+    top: 0,
+    backgroundColor: Colors.nero
+  },
+  item: {
+    paddingTop: 6,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+    borderWidth: 3,
+    borderColor: Colors.skema,
+    marginBottom: 16,
+    overflow: "hidden",
+  },
   title: {
     color: Colors.white,
     position: 'absolute',
