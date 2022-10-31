@@ -27,27 +27,30 @@ class HomeScreen extends BaseScreen {
       <Pressable
         onPress={() => NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.DETAIL.name })}
         style={styles.item}>
-        <Image
-          style={styles.itemBg}
-          source={Images.assets.item_cover.source}
-        />
-
-        <CustomText
-          numberOfLines={2}
-          style={styles.itemName}>
-          Bida Pod Foods
-        </CustomText>
         <View
-          style={styles.itemBottomRow}>
+          style={styles.itemContentContainer}>
+          <Image
+            style={styles.itemBg}
+            source={Images.assets.item_cover.source}
+          />
+
           <CustomText
-            style={styles.itemMembers}
-            size={11}>
-            Gia, Trí, Việt, Khang, Tân, Thiêm, Thắng, Hiệp, Mạnh,123,123,12,312
+            numberOfLines={2}
+            style={styles.itemName}>
+            Bida Pod Foods
           </CustomText>
-          <Pressable
-            hitSlop={16}>
-            <SVGIcon.help width={24} height={24} />
-          </Pressable>
+          <View
+            style={styles.itemBottomRow}>
+            <CustomText
+              style={styles.itemMembers}
+              size={11}>
+              Gia, Trí, Việt, Khang, Tân, Thiêm, Thắng, Hiệp, Mạnh,123,123,12,312
+            </CustomText>
+            <Pressable
+              hitSlop={16}>
+              <SVGIcon.help width={24} height={24} />
+            </Pressable>
+          </View>
         </View>
       </Pressable>
     )
@@ -76,7 +79,7 @@ class HomeScreen extends BaseScreen {
           />
         </Pressable>
         <Pressable
-          style={styles.scanner}>
+          style={styles.createGameButton}>
           <Image
             style={styles.scannerIcon}
             source={Images.assets.create_game_bg.source}
@@ -114,6 +117,13 @@ class HomeScreen extends BaseScreen {
 }
 
 const styles = StyleSheet.create({
+  itemContentContainer: {
+    flex: 1,
+    paddingTop: 6,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+    overflow: 'hidden'
+  },
   topCoverContainer: {
     justifyContent: 'center',
     position: "absolute"
@@ -126,7 +136,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     resizeMode: "cover"
   },
-  scanner: {
+  createGameButton: {
     flex: 1,
     height: 52,
     flexDirection: 'row',
@@ -140,7 +150,8 @@ const styles = StyleSheet.create({
   bottom: {
     flexDirection: "row",
     paddingVertical: 32,
-    paddingHorizontal: 24,
+    paddingRight: 24,
+    paddingLeft: 22,
     position: 'absolute',
     bottom: 0,
     shadowOffset: {
@@ -150,7 +161,6 @@ const styles = StyleSheet.create({
     shadowColor: Colors.black,
     shadowRadius: 20,
     shadowOpacity: 0.1,
-    alignItems: 'center',
     elevation: 5,
   },
   list: {
@@ -186,13 +196,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.nero
   },
   item: {
-    paddingTop: 6,
-    paddingHorizontal: 20,
-    paddingBottom: 16,
     borderWidth: 3,
     borderColor: Colors.skema,
     marginBottom: 16,
-    overflow: "hidden",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowColor: Colors.black,
+    shadowRadius: 20,
+    shadowOpacity: 0.5,
+    elevation: 5,
   },
   title: {
     color: Colors.white,
