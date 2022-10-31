@@ -16,7 +16,6 @@ class CustomText extends BaseCommon {
       color,
       children,
       numberOfLines,
-      bold,
       isLineThrough,
       ...otherProps
     } = this.props;
@@ -24,9 +23,9 @@ class CustomText extends BaseCommon {
     if (color) {
       staticStyle.color = color;
     }
-    // const fontFamily = bold ? 'Manrope-ExtraBold' : 'Manrope-Medium';
+    const fontFamily = "FVF Fernando 08";
     staticStyle.fontSize = size;
-    // staticStyle.fontFamily = fontFamily;
+    staticStyle.fontFamily = fontFamily;
     return (
       <Text
         numberOfLines={numberOfLines}
