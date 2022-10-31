@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "393378890865",
+    "project_id": "casino-14e57",
+    "storage_bucket": "casino-14e57.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393378890865:android:7cae3ec23414f4b34a07d0",
+        "android_client_info": {
+          "package_name": "com.vietdq.casino"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393378890865-0hdvgnq8jb8g97rjcmu9ek232qmp4puu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1bP73aueQgOmBQYjjI7G5yt4rtQ2zMbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393378890865-0hdvgnq8jb8g97rjcmu9ek232qmp4puu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "393378890865-fmgdjdsnfbq03q946nknfi7riqn6l44p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vietdq.casino"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
