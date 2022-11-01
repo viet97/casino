@@ -75,7 +75,7 @@ class SplashScreen extends BaseElement {
       if (Object.hasOwnProperty.call(this.match, key)) {
         const memberScore = this.match[key];
 
-        if (!isNaN(memberScore)) {
+        if (isNaN(memberScore)) {
           isNan = true
         }
 
