@@ -1,4 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
+import { orderBy } from 'lodash';
 import deviceInfoModule from 'react-native-device-info';
 
 
@@ -10,7 +11,9 @@ const FireStoreModule = {
             .doc(game.id)
             .set({
                 ...game,
-                deviceId: this.uid
+                deviceId: this.uid,
+                createAt: firestore.Timestamp.now().toMillis(),
+                updateAt: firestore.Timestamp.now().toMillis()
             })
         return response
     },
@@ -18,7 +21,10 @@ const FireStoreModule = {
         const response = await firestore()
             .collection('Games')
             .doc(game.id)
-            .update(game)
+            .update({
+                ...game,
+                updateAt: firestore.Timestamp.now().toMillis()
+            })
         return response
     },
     listenGamesChange: async function (onChange) {
@@ -26,12 +32,13 @@ const FireStoreModule = {
             .collection('Games')
             .where("deviceId", "==", this.uid)
             .onSnapshot(querySnapshot => {
-                const listGames = []
+                let listGames = []
                 querySnapshot.forEach(documentSnapshot => {
                     console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
                     listGames.push(documentSnapshot.data())
-                    onChange && onChange(listGames)
                 });
+                listGames = orderBy(listGames, ["updateAt"], ['desc'])
+                onChange && onChange(listGames)
             });
     },
     listenGameChange: async function (game, onChange) {
