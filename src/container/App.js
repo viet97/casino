@@ -31,7 +31,6 @@ class AppContainer extends React.Component {
   componentDidMount() {
     StatusBar.setHidden(false);
     OrientationModule.lockToPortrait();
-
     AppState.addEventListener('change', state => {
       if (state !== AppStateModule.appState) {
         AppStateModule.previousAppState = AppStateModule.appState;

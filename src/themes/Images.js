@@ -65,6 +65,10 @@ const DEFINE_REQUIRE = {
     source: require('../../assets/images/home_cover.gif'),
     type: TYPE_IMAGE.PNG,
   },
+  loading: {
+    source: require('../../assets/images/loading.gif'),
+    type: TYPE_IMAGE.PNG,
+  },
 };
 
 export const Images = {

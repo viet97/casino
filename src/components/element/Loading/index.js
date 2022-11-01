@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
 import BaseElement from '../BaseElement';
@@ -7,8 +7,8 @@ import { EmitterManager } from '../../../modules/EmitterManager';
 import LoadingManager from './LoadingManager';
 import { insets } from '../../../utils/DeviceUtil';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MaterialIndicator } from 'react-native-indicators';
 import { Colors } from '../../../themes/Colors';
+import { Images } from '../../../themes/Images';
 
 class Loading extends BaseElement {
   constructor(props) {
@@ -55,16 +55,12 @@ class Loading extends BaseElement {
       return (
         <SafeAreaView
           style={containerStyle}>
-          <View
+          <Image
             style={{
-              flexDirection: 'row',
-              padding: 40,
-              aspectRatio: 1,
-              backgroundColor: Colors.white,
-              borderRadius: 10
-            }}>
-            <MaterialIndicator color={Colors.mainColor} size={40} />
-          </View>
+              width: 150,
+              height: 150
+            }}
+            source={Images.assets.loading.source} />
         </SafeAreaView>
       );
     }

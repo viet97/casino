@@ -13,10 +13,10 @@ import moment from 'moment';
 import { size, trim } from 'lodash';
 import TagInput from 'react-native-tags-input';
 import { v4 as uuidv4 } from 'uuid';
-import LocalStorage from '../../../modules/LocalStorage';
 import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 import FireStoreModule from '../../../modules/FireStoreModule';
+import LoadingManager from '../../element/Loading/LoadingManager';
 
 class CreateScreen extends BaseScreen {
   constructor(props) {
@@ -46,28 +46,33 @@ class CreateScreen extends BaseScreen {
   createGame = async () => {
     const { name, tags } = this.state
     const id = uuidv4()
+    LoadingManager.getInstance().visibleLoading(true)
     try {
-      const response = await FireStoreModule.addGame({
+      await FireStoreModule.addGame({
         name,
         id,
         members: tags.tagsArray,
         matches: []
       })
-      NavigationService.getInstance().navigate({
-        routerName: ROUTER_NAME.DETAIL.name, params: {
-          game: {
-            name,
-            id,
-            members: tags.tagsArray,
-            matches: [],
-            uid: FireStoreModule.uid
+      NavigationService.getInstance().goBack()
+      setTimeout(() => {
+        NavigationService.getInstance().navigate({
+          routerName: ROUTER_NAME.DETAIL.name, params: {
+            game: {
+              name,
+              id,
+              members: tags.tagsArray,
+              matches: [],
+              uid: FireStoreModule.uid
+            }
           }
-        }
+        })
       })
+
     } catch (e) {
       console.error("create game error:", e)
     }
-    // NavigationService.getInstance().navigate({ routerName: ROUTER_NAME.DETAIL.name })
+    LoadingManager.getInstance().visibleLoading(false)
   }
 
   renderBottom = () => {
