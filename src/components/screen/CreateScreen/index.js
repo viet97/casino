@@ -12,6 +12,8 @@ import Input from '../../common/Input';
 import moment from 'moment';
 import { size, trim, uniq } from 'lodash';
 import TagInput from 'react-native-tags-input';
+import 'react-native-get-random-values';
+
 import { v4 as uuidv4 } from 'uuid';
 import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
@@ -50,9 +52,9 @@ class CreateScreen extends BaseScreen {
 
   createGame = async () => {
     const { name, tags } = this.state
-    const id = uuidv4()
-    LoadingManager.getInstance().visibleLoading(true)
     try {
+      const id = uuidv4()
+      LoadingManager.getInstance().visibleLoading(true)
       await FireStoreModule.addGame({
         name,
         id,
@@ -65,6 +67,7 @@ class CreateScreen extends BaseScreen {
       }
       LocalStorage.setItem(LocalStorage.DEFINE_KEY.LIST_NAME, newListName)
       NavigationService.getInstance().goBack()
+
       setTimeout(() => {
         NavigationService.getInstance().navigate({
           routerName: ROUTER_NAME.DETAIL.name, params: {
@@ -80,6 +83,7 @@ class CreateScreen extends BaseScreen {
       })
 
     } catch (e) {
+      alert(e)
       console.error("create game error:", e)
     }
     LoadingManager.getInstance().visibleLoading(false)

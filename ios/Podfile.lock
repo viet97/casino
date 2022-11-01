@@ -573,6 +573,8 @@ PODS:
   - React-jsinspector (0.64.2)
   - react-native-cameraroll (4.1.2):
     - React-Core
+  - react-native-get-random-values (1.8.0):
+    - React-Core
   - react-native-netinfo (5.9.7):
     - React-Core
   - react-native-orientation-locker (1.2.0):
@@ -736,6 +738,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
+  - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker`)
   - react-native-restart (from `../node_modules/react-native-restart`)
@@ -843,6 +846,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-cameraroll:
     :path: "../node_modules/@react-native-community/cameraroll"
+  react-native-get-random-values:
+    :path: "../node_modules/react-native-get-random-values"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-orientation-locker:
@@ -960,6 +965,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
   react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
+  react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-netinfo: 250dc0ca126512f618a8a2ca6a936577e1f66586
   react-native-orientation-locker: 47aaa55d59bfc1613804dc22f159e6bb1cca5f30
   react-native-restart: 733a51ad137f15b0f8dc34c4082e55af7da00979
