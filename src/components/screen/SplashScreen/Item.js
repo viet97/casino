@@ -58,6 +58,7 @@ class Item extends BaseElement {
                     <SVGIcon.zerosum width={28} height={28} />
                 </Pressable>
                 <CustomText
+                    numberOfLines={1}
                     style={styles.playerName}>{trim(item)}</CustomText>
                 <View
                     style={{

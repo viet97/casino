@@ -10,13 +10,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import CustomText from '../../common/Text';
 import Input from '../../common/Input';
 import moment from 'moment';
-import { size, trim } from 'lodash';
+import { size, trim, uniq } from 'lodash';
 import TagInput from 'react-native-tags-input';
 import { v4 as uuidv4 } from 'uuid';
 import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 import FireStoreModule from '../../../modules/FireStoreModule';
 import LoadingManager from '../../element/Loading/LoadingManager';
+import LocalStorage from '../../../modules/LocalStorage';
 
 class CreateScreen extends BaseScreen {
   constructor(props) {
@@ -27,7 +28,8 @@ class CreateScreen extends BaseScreen {
       name: moment().format("DD/MM/YYYY HH:mm"),
       tags: {
         tag: '',
-        tagsArray: []
+        tagsArray: [],
+        listName: []
       },
     };
     this.displayName = 'CreateScreen';
@@ -35,6 +37,9 @@ class CreateScreen extends BaseScreen {
   }
 
   _componentDidMount() {
+    LocalStorage.getItem(LocalStorage.DEFINE_KEY.LIST_NAME).then(listName => {
+      this.setStateSafe({ listName: JSON.parse(listName) || [] })
+    })
   }
 
   isValidate = () => {
@@ -54,6 +59,11 @@ class CreateScreen extends BaseScreen {
         members: tags.tagsArray,
         matches: []
       })
+      let newListName = uniq([...tags.tagsArray, ...(this.state.listName || [])])
+      if (size(newListName) > 50) {
+        newListName = newListName.slice(0, 50)
+      }
+      LocalStorage.setItem(LocalStorage.DEFINE_KEY.LIST_NAME, newListName)
       NavigationService.getInstance().goBack()
       setTimeout(() => {
         NavigationService.getInstance().navigate({
@@ -125,6 +135,7 @@ class CreateScreen extends BaseScreen {
   }
 
   renderSuggestion = () => {
+    if (!size(this.state.listName)) return null
     return (<View
       style={styles.suggestionContainer}>
       <CustomText
@@ -137,13 +148,13 @@ class CreateScreen extends BaseScreen {
         }}>
         <View
           style={styles.suggestionContentContainer}>
-          {[{}, {}, {}, {}, {}, {}].map(item => {
+          {this.state.listName.map(item => {
             return (<Pressable
               onPress={() => {
                 this.setStateSafe({
                   tags: {
                     ...this.state.tags,
-                    tagsArray: [...(this.state.tags?.tagsArray || []), "viet"]
+                    tagsArray: uniq([...(this.state.tags?.tagsArray || []), item])
                   }
                 })
               }}
@@ -152,7 +163,7 @@ class CreateScreen extends BaseScreen {
                 numberOfLines={1}
                 style={styles.tagName}
                 size={13}>
-                Viet1232132  12123
+                {item}
               </CustomText>
             </Pressable>)
           })}
@@ -306,7 +317,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   tagName: {
-    maxWidth: widthDevice / 5
+    maxWidth: widthDevice / 3
   },
   suggestionTag: {
     marginRight: 8,

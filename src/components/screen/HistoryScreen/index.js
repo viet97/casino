@@ -33,6 +33,7 @@ class HistoryScreen extends BaseElement {
       return <View
         style={styles.tableHead}>
         <CustomText
+          numberOfLines={1}
           size={10}>
           {trim(name)}
         </CustomText>

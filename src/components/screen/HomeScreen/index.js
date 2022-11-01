@@ -44,13 +44,14 @@ class HomeScreen extends BaseScreen {
           />
 
           <CustomText
-            numberOfLines={2}
+            numberOfLines={1}
             style={styles.itemName}>
             {trim(name)}
           </CustomText>
           <View
             style={styles.itemBottomRow}>
             <CustomText
+              numberOfLines={2}
               style={styles.itemMembers}
               size={11}>
               {membersNameString}
