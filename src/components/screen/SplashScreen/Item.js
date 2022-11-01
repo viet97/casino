@@ -4,7 +4,7 @@ import { Colors } from '../../../themes/Colors';
 import CustomText from '../../common/Text';
 import SVGIcon from '../../../../assets/SVGIcon';
 import BaseElement from '../../element/BaseElement';
-import { isNumber } from 'lodash';
+import { isNumber, trim } from 'lodash';
 import Input from '../../common/Input';
 
 class Item extends BaseElement {
@@ -58,7 +58,7 @@ class Item extends BaseElement {
                     <SVGIcon.zerosum width={28} height={28} />
                 </Pressable>
                 <CustomText
-                    style={styles.playerName}>{item}</CustomText>
+                    style={styles.playerName}>{trim(item)}</CustomText>
                 <View
                     style={{
                         flexDirection: "row",

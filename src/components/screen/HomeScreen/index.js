@@ -11,6 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 import FireStoreModule from '../../../modules/FireStoreModule';
+import { trim } from 'lodash';
 
 const COVER_HEIGHT = widthDevice * 260 / 393
 
@@ -25,7 +26,7 @@ class HomeScreen extends BaseScreen {
 
   renderItem = ({ item, index }) => {
     const { members, name } = item
-    const membersNameString = members.join(", ")
+    const membersNameString = members.map(name => trim(name)).join(", ")
     return (
       <Pressable
         onPress={() => NavigationService.getInstance().navigate({
@@ -45,7 +46,7 @@ class HomeScreen extends BaseScreen {
           <CustomText
             numberOfLines={2}
             style={styles.itemName}>
-            {name}
+            {trim(name)}
           </CustomText>
           <View
             style={styles.itemBottomRow}>

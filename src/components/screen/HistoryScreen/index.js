@@ -9,11 +9,12 @@ import SVGIcon from '../../../../assets/SVGIcon';
 import KeyboardScrollView from '../../element/KeyboardScrollView';
 import { Row, Table } from 'react-native-table-component';
 import BaseElement from '../../element/BaseElement';
+import { trim } from 'lodash';
 
 class HistoryScreen extends BaseElement {
   constructor(props) {
     super(props);
-    this.width = (widthDevice - (this.props.game.members.length - 1)) / this.props.game.members.length
+    this.width = (widthDevice - 2) / this.props.game.members.length
     if (this.width < 100) {
       this.width = 100
     }
@@ -33,7 +34,7 @@ class HistoryScreen extends BaseElement {
         style={styles.tableHead}>
         <CustomText
           size={10}>
-          {name}
+          {trim(name)}
         </CustomText>
         <CustomText
           size={12}>
