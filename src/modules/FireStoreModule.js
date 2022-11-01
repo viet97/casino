@@ -29,9 +29,8 @@ const FireStoreModule = {
             .doc(game.id)
             .set({
                 ...game,
-                deviceId: this.uid,
-                createAt: firestore.Timestamp.now().toMillis(),
-                updateAt: firestore.Timestamp.now().toMillis()
+                created: firestore.Timestamp.now().toMillis(),
+                updated: firestore.Timestamp.now().toMillis()
             })
         return response
     },
@@ -41,21 +40,21 @@ const FireStoreModule = {
             .doc(game.id)
             .update({
                 ...game,
-                updateAt: firestore.Timestamp.now().toMillis()
+                updated: firestore.Timestamp.now().toMillis()
             })
         return response
     },
     listenGamesChange: async function (onChange) {
         return firestore()
             .collection(`users/${this.uid}/games`)
-            .where("deviceId", "==", this.uid)
             .onSnapshot(querySnapshot => {
+                if (!querySnapshot) return
                 let listGames = []
                 querySnapshot.forEach(documentSnapshot => {
                     console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
                     listGames.push(documentSnapshot.data())
                 });
-                listGames = orderBy(listGames, ["updateAt"], ['desc'])
+                listGames = orderBy(listGames, ["updated"], ['desc'])
                 onChange && onChange(listGames)
             });
     },
@@ -64,7 +63,7 @@ const FireStoreModule = {
             .collection(`users/${this.uid}/games`)
             .doc(game.id)
             .onSnapshot(querySnapshot => {
-                console.log("querySnapShot", querySnapshot)
+                if (!querySnapshot) return
                 onChange && onChange(querySnapshot.data())
             });
     }

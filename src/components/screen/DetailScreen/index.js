@@ -10,6 +10,7 @@ import { ScrollableTabView } from '../../common';
 import SVGIcon from '../../../../assets/SVGIcon';
 import { insets } from '../../../utils/DeviceUtil';
 import FireStoreModule from '../../../modules/FireStoreModule';
+import KeyboardScrollView from '../../element/KeyboardScrollView';
 
 class DetailScreen extends BaseScreen {
   constructor(props) {
@@ -37,6 +38,12 @@ class DetailScreen extends BaseScreen {
     return (
       <View style={styles.container}>
         <ScrollableTabView
+          locked
+          contentProps={{
+            bounces: false,
+            keyboardShouldPersistTaps: "handled"
+          }}
+          scrollWithoutAnimation
           renderTabBar={() => <View />}
           ref={ref => this.scrollableTabView = ref}
           style={{ flex: 1 }}

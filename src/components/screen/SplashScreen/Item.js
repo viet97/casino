@@ -70,6 +70,7 @@ class Item extends BaseElement {
                         <SVGIcon.up width={24} height={24} />
                     </Pressable>
                     <Input
+                        selectTextOnFocus
                         onBlur={e => {
                             if (isNaN(Number(e.nativeEvent.text)) || !Number(e.nativeEvent.text)) {
                                 this.setStateSafe({ value: "0" })

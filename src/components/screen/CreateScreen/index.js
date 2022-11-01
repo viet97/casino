@@ -20,6 +20,7 @@ import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 import FireStoreModule from '../../../modules/FireStoreModule';
 import LoadingManager from '../../element/Loading/LoadingManager';
 import LocalStorage from '../../../modules/LocalStorage';
+import KeyboardScrollView from '../../element/KeyboardScrollView';
 
 class CreateScreen extends BaseScreen {
   constructor(props) {
@@ -36,6 +37,7 @@ class CreateScreen extends BaseScreen {
     };
     this.displayName = 'CreateScreen';
     this.listGame = props.route?.params?.listGame || []
+    this.maxTag = 12
   }
 
   _componentDidMount() {
@@ -146,37 +148,35 @@ class CreateScreen extends BaseScreen {
         size={11}>
         Thêm nhanh người chơi
       </CustomText>
-      <ScrollView
-        style={{
-          flex: 1,
-        }}>
-        <View
-          style={styles.suggestionContentContainer}>
-          {this.state.listName.map(item => {
-            return (<Pressable
-              onPress={() => {
-                this.setStateSafe({
-                  tags: {
-                    ...this.state.tags,
-                    tagsArray: uniq([...(this.state.tags?.tagsArray || []), item])
-                  }
-                })
-              }}
-              style={styles.suggestionTag}>
-              <CustomText
-                numberOfLines={1}
-                style={styles.tagName}
-                size={13}>
-                {item}
-              </CustomText>
-            </Pressable>)
-          })}
-        </View>
-      </ScrollView>
+      <View
+        style={styles.suggestionContentContainer}>
+        {this.state.listName.map(item => {
+          return (<Pressable
+            onPress={() => {
+              this.setStateSafe({
+                tags: {
+                  ...this.state.tags,
+                  tagsArray: uniq([...(this.state.tags?.tagsArray || []), item])
+                }
+              })
+            }}
+            style={styles.suggestionTag}>
+            <CustomText
+              numberOfLines={1}
+              style={styles.tagName}
+              size={13}>
+              {item}
+            </CustomText>
+          </Pressable>)
+        })}
+      </View>
     </View>)
   }
 
   updateTagState = (state) => {
+    if (size(state.tagsArray) > this.maxTag) {
+      return NavigationService.getInstance().showToast({ message: "Số lượng người chơi tối đa là 12" })
+    }
     this.setState({
       tags: state
     })
@@ -218,7 +218,7 @@ class CreateScreen extends BaseScreen {
               <View
                 style={[styles.suggestionTag, {
                   flexDirection: 'row',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }]}>
                 <CustomText
                   numberOfLines={1}
@@ -258,19 +258,17 @@ class CreateScreen extends BaseScreen {
             TẠO TRẬN MỚI
           </CustomText>
         </View>
-        <View
+        <KeyboardScrollView
+          contentContainerStyle={styles.scrollViewContentContainer}
+          keyboardShouldPersistTaps="handled"
           style={{
             flex: 1,
             marginTop: -32
           }}>
-          <ScrollView
-            contentContainerStyle={styles.scrollViewContentContainer}
-            style={{ flex: 1 }}>
-            {this.renderNameInput()}
-            {this.renderTagInput()}
-            {this.renderSuggestion()}
-          </ScrollView>
-        </View>
+          {this.renderNameInput()}
+          {this.renderTagInput()}
+          {this.renderSuggestion()}
+        </KeyboardScrollView>
 
         {this.renderBottom()}
         <Pressable
@@ -302,7 +300,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     width: '100%',
     fontSize: 14,
-    fontFamily: "FVF Fernando 08"
+    fontFamily: "FVF Fernando 08",
   },
   tagInputContainer: {
     paddingHorizontal: 16,

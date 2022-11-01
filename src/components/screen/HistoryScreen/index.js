@@ -16,7 +16,7 @@ class HistoryScreen extends BaseElement {
     super(props);
     this.width = (widthDevice - 2) / this.props.game.members.length
     if (this.width < 100) {
-      this.width = 100
+      this.width = 80
     }
     this.state = {
       widthArr: this.props.game.members.map(() => this.width)
@@ -113,6 +113,7 @@ class HistoryScreen extends BaseElement {
     const { widthArr } = this.state
     return (
       <ScrollView
+        bounces={false}
         horizontal>
         <View>
           <Table borderStyle={styles.borderStyle}>

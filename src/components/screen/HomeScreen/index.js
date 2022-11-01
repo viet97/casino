@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.backgroundScreen
+    backgroundColor: "#05131C"
   },
   cover: {
     resizeMode: "stretch",
