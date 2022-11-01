@@ -182,6 +182,10 @@ export default class NavigationService {
         onHidden();
       },
       useNativeDriver: true,
+      textStyle: {
+        fontFamily: "FVF Fernando 08",
+        fontSize: 15
+      }
     };
     this.toast = Toast.show(message, configToast);
     if (timeoutVar) {

@@ -15,8 +15,7 @@ class Input extends BaseCommon {
       ...otherProps
     } = this.props;
     const staticStyle = {};
-    // const fontFamily = bold ? 'Manrope-ExtraBold' : 'Manrope-Medium';
-    // staticStyle.fontFamily = fontFamily;
+    staticStyle.fontFamily = "FVF Fernando 08";
     return (
       <TextInput
         style={[

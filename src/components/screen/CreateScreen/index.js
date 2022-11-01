@@ -298,6 +298,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     width: '100%',
     fontSize: 14,
+    fontFamily: "FVF Fernando 08"
   },
   tagInputContainer: {
     paddingHorizontal: 16,

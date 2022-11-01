@@ -70,9 +70,15 @@ class SplashScreen extends BaseElement {
   addMatch = async () => {
     let zeroSum = 0;
     let hasEdited = false
+    let isNan = false
     for (const key in this.match) {
       if (Object.hasOwnProperty.call(this.match, key)) {
         const memberScore = this.match[key];
+
+        if (!isNaN(memberScore)) {
+          isNan = true
+        }
+
         if (memberScore) {
           hasEdited = true
         }
@@ -81,6 +87,9 @@ class SplashScreen extends BaseElement {
     }
     if (!hasEdited) {
       return
+    }
+    if (isNan) {
+      return NavigationService.getInstance().showToast({ message: "Dữ liệu không hợp lệ" })
     }
     if (zeroSum !== 0) {
       return NavigationService.getInstance().showToast({ message: "Tổng chưa bằng 0" })
