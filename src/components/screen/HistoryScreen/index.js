@@ -47,7 +47,12 @@ class HistoryScreen extends BaseElement {
 
   getTableData = () => {
     return this.props.game.matches.map((match) => {
-      return Object.values(match).map(score => {
+      return this.props.game.members.map(member => {
+        if (Object.hasOwnProperty.call(match, member)) {
+          return match[member]
+        }
+        return 0
+      }).map(score => {
         let color = Colors.white
         if (score > 0) {
           color = Colors.green
@@ -126,22 +131,24 @@ class HistoryScreen extends BaseElement {
             style={styles.dataWrapper}>
             <Table borderStyle={styles.borderStyle}>
               {
-                this.getTableData().map((rowData, index) => (
-                  <Row
-                    key={index}
-                    data={rowData}
-                    widthArr={widthArr}
-                    style={{
-                      height: 28,
-                      backgroundColor: index % 2 ? Colors.kode : Colors.TRANSPARENT,
-                    }}
-                    textStyle={{
-                      textAlign: 'center',
-                      color: rowData > 0 ? Colors.green : "red",
-                      fontSize: 12
-                    }}
-                  />
-                ))
+                this.getTableData().map((rowData, index) => {
+                  return (
+                    <Row
+                      key={index}
+                      data={rowData}
+                      widthArr={widthArr}
+                      style={{
+                        height: 28,
+                        backgroundColor: index % 2 ? Colors.kode : Colors.TRANSPARENT,
+                      }}
+                      textStyle={{
+                        textAlign: 'center',
+                        color: rowData > 0 ? Colors.green : "red",
+                        fontSize: 12
+                      }}
+                    />
+                  )
+                })
               }
             </Table>
           </ScrollView>
@@ -152,7 +159,7 @@ class HistoryScreen extends BaseElement {
 
   renderContent() {
     return (
-      <View style={styles.container}>
+      <View style={styles.container} >
         <View>
           <Image
             source={Images.assets.history_cover.source}
@@ -168,7 +175,7 @@ class HistoryScreen extends BaseElement {
           </CustomText>
         </View>
         {this.renderTable()}
-      </View>
+      </View >
     );
   }
 }
