@@ -62,7 +62,7 @@ class CreateScreen extends BaseScreen {
         id,
         members: tags.tagsArray,
         matches: []
-      })
+      }, id)
       let newListName = uniq([...tags.tagsArray, ...(this.state.listName || [])])
       if (size(newListName) > 50) {
         newListName = newListName.slice(0, 50)

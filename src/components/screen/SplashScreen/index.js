@@ -99,9 +99,8 @@ class SplashScreen extends BaseElement {
       this.match,
       ...(newGame.matches || [])
     ]
-
     try {
-      FireStoreModule.updateGame(newGame)
+      FireStoreModule.updateGame(newGame, newGame.id)
       for (const ref of this.listRef) {
         ref.current.clearData()
       }

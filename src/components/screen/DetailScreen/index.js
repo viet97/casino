@@ -24,7 +24,7 @@ class DetailScreen extends BaseScreen {
   }
 
   async _componentDidMount() {
-    this.gameListener = FireStoreModule.listenGameChange(this.props.route?.params?.game, game => {
+    this.gameListener = FireStoreModule.listenGameChange(this.props.route?.params?.game?.id, game => {
       this.setStateSafe({ game })
     })
   }
