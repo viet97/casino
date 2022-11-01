@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>393378890865-fmgdjdsnfbq03q946nknfi7riqn6l44p.apps.googleusercontent.com</string>
+	<string>900185296667-jvbpfhh9b8vcv0hq9eecgju7rvcat57t.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.393378890865-fmgdjdsnfbq03q946nknfi7riqn6l44p</string>
+	<string>com.googleusercontent.apps.900185296667-jvbpfhh9b8vcv0hq9eecgju7rvcat57t</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDX0tgk6MIlPOQ3UYJhiJOc5gpfD8iT3Jc</string>
+	<string>AIzaSyBbbuuUURQjpgNuMqYDn83hsOsbm4fOrZA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>393378890865</string>
+	<string>900185296667</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.vietdq.casino</string>
+	<string>co.podfoods.heypod</string>
 	<key>PROJECT_ID</key>
-	<string>casino-14e57</string>
+	<string>casino-ledger</string>
 	<key>STORAGE_BUCKET</key>
-	<string>casino-14e57.appspot.com</string>
+	<string>casino-ledger.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:393378890865:ios:99f1ded80a5212224a07d0</string>
+	<string>1:900185296667:ios:427b3f98698791d9c40dbe</string>
 </dict>
 </plist>
