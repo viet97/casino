@@ -101,7 +101,8 @@ const styles = StyleSheet.create({
         height: 24,
         textAlign: 'center',
         fontSize: 18,
-        color: Colors.white
+        color: Colors.white,
+        padding: 0
     },
     playerName: {
         marginLeft: 16,

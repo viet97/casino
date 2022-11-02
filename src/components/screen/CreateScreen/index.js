@@ -291,6 +291,8 @@ const styles = StyleSheet.create({
   inputName: {
     marginTop: 2,
     height: 30,
+    lineHeight: 30,
+    padding: 0,
     letterSpacing: 0.05,
   },
   tagInput: {
@@ -301,6 +303,8 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: 14,
     fontFamily: "FVF Fernando 08",
+    lineHeight: 30,
+    padding: 0,
   },
   tagInputContainer: {
     paddingHorizontal: 16,
