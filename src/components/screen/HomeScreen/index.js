@@ -112,7 +112,6 @@ class HomeScreen extends BaseScreen {
   }
 
   async _componentDidMount() {
-    FireStoreModule.auth()
     this.gamesListener = await FireStoreModule.listenGamesChange(listGame => {
       this.setStateSafe({ listGame })
     })

@@ -69,6 +69,10 @@ const DEFINE_REQUIRE = {
     source: require('../../assets/images/loading.gif'),
     type: TYPE_IMAGE.PNG,
   },
+  splash: {
+    source: require('../../assets/images/splash.gif'),
+    type: TYPE_IMAGE.PNG,
+  },
 };
 
 export const Images = {

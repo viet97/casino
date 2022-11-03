@@ -3,14 +3,13 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import BaseScreen from '../BaseScreen';
 import { Colors } from '../../../themes/Colors';
-import SplashScreen from '../SplashScreen';
 import HistoryScreen from '../HistoryScreen';
 import CustomText from '../../common/Text';
 import { ScrollableTabView } from '../../common';
 import SVGIcon from '../../../../assets/SVGIcon';
 import { insets } from '../../../utils/DeviceUtil';
 import FireStoreModule from '../../../modules/FireStoreModule';
-import KeyboardScrollView from '../../element/KeyboardScrollView';
+import FightScreen from '../FightScreen';
 
 class DetailScreen extends BaseScreen {
   constructor(props) {
@@ -56,7 +55,7 @@ class DetailScreen extends BaseScreen {
             style={{
               flex: 1
             }}>
-            <SplashScreen
+            <FightScreen
               game={game}
             />
           </View>

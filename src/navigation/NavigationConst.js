@@ -1,5 +1,6 @@
 import CreateScreen from '../components/screen/CreateScreen';
 import DetailScreen from '../components/screen/DetailScreen';
+import FightScreen from '../components/screen/FightScreen';
 import HistoryScreen from '../components/screen/HistoryScreen';
 import HomeScreen from '../components/screen/HomeScreen';
 import SplashScreen from '../components/screen/SplashScreen';
@@ -29,5 +30,10 @@ export const ROUTER_NAME = {
     title: 'Create',
     name: 'CreateScreen',
     component: CreateScreen,
+  },
+  FIGHT: {
+    title: 'Fight',
+    name: 'FightScreen',
+    component: FightScreen,
   },
 };
