@@ -7,22 +7,29 @@ import BaseElement from '../../element/BaseElement';
 import { trim } from 'lodash';
 import { Images } from '../../../themes/Images';
 import { widthDevice } from '../../../utils/DeviceUtil';
+import Modal from 'react-native-modal';
+import FireStoreModule from '../../../modules/FireStoreModule';
+import NavigationService from '../../../navigation/NavigationService';
+import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 
 class Item extends BaseElement {
     constructor(props) {
         super(props);
         this.state = {
-            isEdit: true
+            isEdit: false,
+            isDeleteVisible: false
         };
     }
 
     renderEdit = () => {
+        const { item } = this.props
         return <View
             style={styles.editRow}>
             <Pressable
                 style={styles.delete}>
                 <SVGIcon.skull width={24} height={24} />
                 <CustomText
+                    onPress={() => this.setStateSafe({ isDeleteVisible: true })}
                     size={11}
                     style={{
                         lineHeight: 22,
@@ -32,6 +39,15 @@ class Item extends BaseElement {
                 </CustomText>
             </Pressable>
             <Pressable
+                onPress={() => NavigationService.getInstance().navigate({
+                    routerName: ROUTER_NAME.CREATE_GAME.name,
+                    params: {
+                        game: item,
+                        onUpdateSucess: () => {
+                            this.setStateSafe({ isEdit: false })
+                        }
+                    }
+                })}
                 style={styles.edit}>
                 <SVGIcon.key width={24} height={24} />
                 <CustomText
@@ -60,7 +76,7 @@ class Item extends BaseElement {
 
     renderContent() {
         const { item, onClick } = this.props
-        const { members, name } = item
+        const { members, name, id } = item
         const membersNameString = members.map(name => trim(name)).join(", ")
         return (
             <Pressable
@@ -89,17 +105,153 @@ class Item extends BaseElement {
                             </CustomText>}
                         </View>
                         <Pressable
+                            onPress={() => this.setStateSafe({ isEdit: !this.state.isEdit })}
                             hitSlop={16}>
                             <SVGIcon.help width={24} height={24} />
                         </Pressable>
                     </View>
                 </View>
+                <Modal
+                    avoidKeyboard
+                    useNativeDriver
+                    onBackdropPress={() => this.setStateSafe({ isDeleteVisible: false })}
+                    onBackButtonPress={() => this.setStateSafe({ isDeleteVisible: false })}
+                    style={[
+                        {
+                            flex: 1,
+                            margin: 0,
+                            width: widthDevice,
+                            alignSelf: 'center',
+                            width: 300
+                        },
+                    ]}
+                    backdropOpacity={0}
+                    isVisible={this.state.isDeleteVisible}
+                >
+                    <View
+                        style={styles.modalContent}>
+                        <CustomText
+                            size={12}
+                            style={{
+                                lineHeight: 25,
+                                letterSpacing: 0.1
+                            }}>
+                            XÓA TRẬN ĐẤU
+                        </CustomText>
+                        <CustomText
+                            size={10}
+                            style={{
+                                lineHeight: 21,
+                                textAlign: 'center',
+                            }}>
+                            Bạn có chắc chắn xóa trận đấu
+                        </CustomText>
+                        <View
+                            style={styles.textRow2}>
+                            <CustomText
+                                style={{
+                                    lineHeight: 21,
+                                }}
+                                size={10}>
+                                [
+                            </CustomText>
+                            <CustomText
+                                numberOfLines={1}
+                                style={{
+                                    maxWidth: 250,
+                                    lineHeight: 21,
+                                }}
+                                size={10}>
+                                {name}
+                            </CustomText>
+                            <CustomText
+                                style={{
+                                    lineHeight: 21,
+                                }}
+                                size={10}>
+                                ]?
+                            </CustomText>
+                        </View>
+                        <CustomText
+                            size={10}
+                            style={{
+                                lineHeight: 21,
+                                textAlign: 'center',
+                            }}>
+                            Trận đấu sẽ không thể khôi phục.
+                        </CustomText>
+
+                        <View
+                            style={styles.bottomSection}>
+                            <Pressable
+                                onPress={() => this.setStateSafe({ isDeleteVisible: false })}
+                                style={styles.bottomROw}>
+                                <SVGIcon.deleteIcon width={24} height={24} />
+                                <CustomText
+                                    style={{
+                                        marginLeft: 8,
+                                    }}
+                                    size={11}>
+                                    Không
+                                </CustomText>
+                            </Pressable>
+                            <View
+                                style={styles.border} />
+                            <Pressable
+                                onPress={() => FireStoreModule.deleteGame(id)}
+                                style={styles.bottomROw}>
+                                <SVGIcon.ticked width={24} height={24} />
+                                <CustomText
+                                    style={{
+                                        marginLeft: 8
+                                    }}
+                                    size={11}>
+                                    Xác nhận
+                                </CustomText>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
             </Pressable>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    border: {
+        height: 24,
+        marginVertical: 12,
+        width: 1,
+        backgroundColor: "rgba(255, 255, 255, 0.5)",
+    },
+    bottomROw: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        height: '100%'
+    },
+    bottomSection: {
+        flexDirection: "row",
+        height: 49,
+        alignItems: "center",
+        marginTop: 8
+    },
+    textRow2: {
+        flexDirection: "row",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    modalContent: {
+        backgroundColor: "#1A152A",
+        paddingTop: 16,
+        paddingBottom: 8,
+        paddingHorizontal: 12,
+        borderColor: "#02FFFF",
+        borderWidth: 2,
+        alignItems: 'center'
+    },
     itemBottomRowContent: {
         flexDirection: "row",
         height: 36,

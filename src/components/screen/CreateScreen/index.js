@@ -25,19 +25,21 @@ import KeyboardScrollView from '../../element/KeyboardScrollView';
 class CreateScreen extends BaseScreen {
   constructor(props) {
     super(props);
+    this.displayName = 'CreateScreen';
+    this.game = props.route?.params?.game
+    this.isEdit = !!this.game
+    this.maxTag = 12
+
     this.state = {
       isFocusNameInput: false,
       isFocusTagInput: false,
       name: moment().format("DD/MM/YYYY HH:mm"),
       tags: {
         tag: '',
-        tagsArray: [],
-        listName: []
+        tagsArray: this.game?.members || [],
       },
+      listName: []
     };
-    this.displayName = 'CreateScreen';
-    this.listGame = props.route?.params?.listGame || []
-    this.maxTag = 12
   }
 
   _componentDidMount() {
@@ -57,33 +59,43 @@ class CreateScreen extends BaseScreen {
     try {
       const id = uuidv4()
       LoadingManager.getInstance().visibleLoading(true)
-      await FireStoreModule.addGame({
-        name,
-        id,
-        members: tags.tagsArray,
-        matches: []
-      }, id)
+      if (this.isEdit) {
+        await FireStoreModule.updateGame({
+          ...this.game,
+          name,
+          members: tags.tagsArray,
+        }, this.game.id)
+        this.props.route?.params.onUpdateSucess()
+      } else {
+        await FireStoreModule.addGame({
+          name,
+          id,
+          members: tags.tagsArray,
+          matches: []
+        }, id)
+      }
+
       let newListName = uniq([...tags.tagsArray, ...(this.state.listName || [])])
       if (size(newListName) > 50) {
         newListName = newListName.slice(0, 50)
       }
       LocalStorage.setItem(LocalStorage.DEFINE_KEY.LIST_NAME, newListName)
       NavigationService.getInstance().goBack()
-
-      setTimeout(() => {
-        NavigationService.getInstance().navigate({
-          routerName: ROUTER_NAME.DETAIL.name, params: {
-            game: {
-              name,
-              id,
-              members: tags.tagsArray,
-              matches: [],
-              uid: FireStoreModule.uid
+      if (!this.isEdit) {
+        setTimeout(() => {
+          NavigationService.getInstance().navigate({
+            routerName: ROUTER_NAME.DETAIL.name, params: {
+              game: {
+                name,
+                id,
+                members: tags.tagsArray,
+                matches: [],
+                uid: FireStoreModule.uid
+              }
             }
-          }
+          })
         })
-      })
-
+      }
     } catch (e) {
       alert(e)
       console.error("create game error:", e)
@@ -106,10 +118,10 @@ class CreateScreen extends BaseScreen {
             }]}
             source={Images.assets.start_game_cover.source}
           />
-          <SVGIcon.start_game />
+          {this.isEdit ? <SVGIcon.ticked width={28} height={28} /> : <SVGIcon.start_game width={28} height={28} />}
           <CustomText
             style={styles.createGame}>
-            Bắt đầu sát phạt
+            {this.isEdit ? "Lưu thay đổi" : "Bắt đầu sát phạt"}
           </CustomText>
         </Pressable>
       </LinearGradient>
@@ -226,14 +238,14 @@ class CreateScreen extends BaseScreen {
                   size={13}>
                   {item}
                 </CustomText>
-                <Pressable
+                {!this.isEdit ? <Pressable
                   onPress={deleteTag}
                   hitSlop={8}
                   style={{
                     marginLeft: 6,
                   }}>
                   <SVGIcon.deleteIcon width={12} height={12} />
-                </Pressable>
+                </Pressable> : null}
               </View>
             )
           }}

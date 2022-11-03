@@ -46,6 +46,13 @@ const FireStoreModule = {
             })
         return response
     },
+    deleteGame: async function (id) {
+        const response = await firestore()
+            .collection(`users/${this.uid}/games`)
+            .doc(id)
+            .delete()
+        return response
+    },
     listenGamesChange: async function (onChange) {
         return firestore()
             .collection(`users/${this.uid}/games`)

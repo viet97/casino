@@ -28,7 +28,7 @@ class HistoryScreen extends BaseElement {
     return this.props?.game?.members.map((name, index) => {
       let sum = 0
       for (const match of this.props?.game?.matches) {
-        sum += match[name]
+        sum += (match[name] || 0)
       }
       return <View
         style={styles.tableHead}>
