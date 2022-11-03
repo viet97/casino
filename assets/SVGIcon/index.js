@@ -13,6 +13,9 @@ import item_cover from './item_cover.svg';
 import list_cover from './list_cover.svg';
 import scanner from './scanner.svg';
 import start_game from './start_game.svg';
+import key from './key.svg';
+import skull from './skull.svg';
+import beer from './beer.svg';
 
 export default {
   cancel,
@@ -29,5 +32,8 @@ export default {
   item_cover,
   list_cover,
   scanner,
-  start_game
+  start_game,
+  key,
+  skull,
+  beer
 };

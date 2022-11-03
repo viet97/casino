@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
   text: {
     lineHeight: 25,
     textAlign: 'center',
-    marginTop: 24
+    marginTop: 24,
+    minHeight: 150
   },
   header: {
     flexDirection: "row",

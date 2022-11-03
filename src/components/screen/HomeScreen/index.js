@@ -11,7 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 import FireStoreModule from '../../../modules/FireStoreModule';
-import { trim } from 'lodash';
+import Item from './Item';
 
 const COVER_HEIGHT = widthDevice * 260 / 393
 
@@ -24,45 +24,17 @@ class HomeScreen extends BaseScreen {
     this.displayName = 'HomeScreen';
   }
 
-  renderItem = ({ item, index }) => {
-    const { members, name } = item
-    const membersNameString = members.map(name => trim(name)).join(", ")
+  renderItem = ({ item }) => {
     return (
-      <Pressable
-        onPress={() => NavigationService.getInstance().navigate({
+      <Item
+        item={item}
+        onClick={() => NavigationService.getInstance().navigate({
           routerName: ROUTER_NAME.DETAIL.name,
           params: {
             game: item
           }
         })}
-        style={styles.item}>
-        <View
-          style={styles.itemContentContainer}>
-          <Image
-            style={styles.itemBg}
-            source={Images.assets.item_cover.source}
-          />
-
-          <CustomText
-            numberOfLines={1}
-            style={styles.itemName}>
-            {trim(name)}
-          </CustomText>
-          <View
-            style={styles.itemBottomRow}>
-            <CustomText
-              numberOfLines={2}
-              style={styles.itemMembers}
-              size={11}>
-              {membersNameString}
-            </CustomText>
-            <Pressable
-              hitSlop={16}>
-              <SVGIcon.help width={24} height={24} />
-            </Pressable>
-          </View>
-        </View>
-      </Pressable>
+      />
     )
   }
 
@@ -144,13 +116,6 @@ class HomeScreen extends BaseScreen {
 }
 
 const styles = StyleSheet.create({
-  itemContentContainer: {
-    flex: 1,
-    paddingTop: 6,
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-    overflow: 'hidden'
-  },
   topCoverContainer: {
     justifyContent: 'center',
     position: "absolute"
@@ -196,44 +161,6 @@ const styles = StyleSheet.create({
   listContentContainer: {
     paddingTop: COVER_HEIGHT - 32,
     paddingBottom: 100
-  },
-  itemMembers: {
-    color: Colors.white,
-    lineHeight: 18,
-    marginRight: 20,
-    flex: 1
-  },
-  itemBottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end'
-  },
-  itemName: {
-    letterSpacing: 0.05,
-    color: Colors.white,
-    lineHeight: 29.75
-  },
-  itemBg: {
-    ...StyleSheet.absoluteFillObject,
-    position: "absolute",
-    left: 0,
-    right: 0,
-    width: widthDevice - 48,
-    height: 90,
-    top: 0,
-    backgroundColor: Colors.nero
-  },
-  item: {
-    borderWidth: 3,
-    borderColor: Colors.skema,
-    marginBottom: 16,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: Colors.black,
-    shadowRadius: 20,
-    shadowOpacity: 0.5,
-    elevation: 5,
   },
   title: {
     color: Colors.white,
