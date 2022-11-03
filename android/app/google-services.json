@@ -1,40 +1,40 @@
 {
   "project_info": {
-    "project_number": "393378890865",
-    "project_id": "casino-14e57",
-    "storage_bucket": "casino-14e57.appspot.com"
+    "project_number": "900185296667",
+    "project_id": "casino-ledger",
+    "storage_bucket": "casino-ledger.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:393378890865:android:7cae3ec23414f4b34a07d0",
+        "mobilesdk_app_id": "1:900185296667:android:13ed1f091dbd9e0bc40dbe",
         "android_client_info": {
           "package_name": "com.vietdq.casino"
         }
       },
       "oauth_client": [
         {
-          "client_id": "393378890865-0hdvgnq8jb8g97rjcmu9ek232qmp4puu.apps.googleusercontent.com",
+          "client_id": "900185296667-7mflftbfmar48ep04e5vs6mp7omcvndr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB1bP73aueQgOmBQYjjI7G5yt4rtQ2zMbk"
+          "current_key": "AIzaSyA9QgnU1s0gbzL2UoNF1HpsghQx6UXoU3A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "393378890865-0hdvgnq8jb8g97rjcmu9ek232qmp4puu.apps.googleusercontent.com",
+              "client_id": "900185296667-7mflftbfmar48ep04e5vs6mp7omcvndr.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "393378890865-fmgdjdsnfbq03q946nknfi7riqn6l44p.apps.googleusercontent.com",
+              "client_id": "900185296667-jvbpfhh9b8vcv0hq9eecgju7rvcat57t.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.vietdq.casino"
+                "bundle_id": "co.podfoods.heypod"
               }
             }
           ]
