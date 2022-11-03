@@ -5,6 +5,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
+  StatusBar,
   TextInput,
   UIManager,
 } from 'react-native';
@@ -130,6 +131,7 @@ export default class KeyboardScrollView extends BaseElement {
     return (
       <KeyboardAvoidingView
         style={{ flex: 1 }}
+        keyboardVerticalOffset={this.props.keyboardVerticalOffset}
         behavior={IS_ANDROID ? 'height' : 'padding'}
       >
         <ScrollView

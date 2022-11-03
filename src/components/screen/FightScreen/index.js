@@ -3,7 +3,7 @@ import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 
 import NavigationService from '../../../navigation/NavigationService';
 import { Images } from '../../../themes/Images';
-import { widthDevice } from '../../../utils/DeviceUtil';
+import { IS_ANDROID, widthDevice } from '../../../utils/DeviceUtil';
 import { Colors } from '../../../themes/Colors';
 import CustomText from '../../common/Text';
 import SVGIcon from '../../../../assets/SVGIcon';
@@ -145,6 +145,7 @@ class FightScreen extends BaseElement {
     return (
       <View style={styles.container}>
         <KeyboardScrollView
+          keyboardVerticalOffset={IS_ANDROID ? 58 : 0}
           style={{
             flex: 1,
           }}>
