@@ -246,25 +246,25 @@ class CreateScreen extends BaseScreen {
   renderContent() {
     return (
       <View style={styles.container}>
-        <View
-          style={styles.topCoverContainer}>
-          <Image
-            source={Images.assets.create_cover.source}
-            style={styles.cover}
-          />
-          <CustomText
-            size={22}
-            style={styles.title}>
-            TẠO TRẬN MỚI
-          </CustomText>
-        </View>
         <KeyboardScrollView
           contentContainerStyle={styles.scrollViewContentContainer}
           keyboardShouldPersistTaps="handled"
           style={{
             flex: 1,
-            marginTop: -32
           }}>
+          <View
+            style={styles.topCoverContainer}>
+            <Image
+              source={Images.assets.create_cover.source}
+              style={styles.cover}
+            />
+            <CustomText
+              size={22}
+              style={styles.title}>
+              TẠO TRẬN MỚI
+            </CustomText>
+          </View>
+
           {this.renderNameInput()}
           {this.renderTagInput()}
           {this.renderSuggestion()}
@@ -361,6 +361,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     shadowOpacity: 0.5,
     elevation: 5,
+    marginTop: -32
   },
   cover: {
     resizeMode: "stretch",

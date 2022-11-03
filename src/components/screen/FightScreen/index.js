@@ -51,19 +51,14 @@ class FightScreen extends BaseElement {
   }
 
   renderList = () => {
-    return <KeyboardScrollView
-      style={{
-        flex: 1,
-      }}>
-      <FlatList
-        keyboardShouldPersistTaps={"handled"}
-        bounces={false}
-        data={this.props.game?.members}
-        style={styles.list}
-        keyExtractor={(item) => item}
-        renderItem={this.renderItem}
-      />
-    </KeyboardScrollView>
+    return <FlatList
+      keyboardShouldPersistTaps={"handled"}
+      bounces={false}
+      data={this.props.game?.members}
+      style={styles.list}
+      keyExtractor={(item) => item}
+      renderItem={this.renderItem}
+    />
   }
 
   addMatch = async () => {
@@ -149,21 +144,26 @@ class FightScreen extends BaseElement {
   renderContent() {
     return (
       <View style={styles.container}>
-        <View>
-          <Image
-            source={Images.assets.top_cover.source}
-            style={styles.cover}
-          />
-        </View>
-        <View
-          style={styles.title}>
-          <CustomText
-            style={styles.subTitle}>
-            nghiêm túc thực hiện{`\n`}
-            nhiệm vụ người cầm súng
-          </CustomText>
-        </View>
-        {this.renderList()}
+        <KeyboardScrollView
+          style={{
+            flex: 1,
+          }}>
+          <View>
+            <Image
+              source={Images.assets.top_cover.source}
+              style={styles.cover}
+            />
+          </View>
+          <View
+            style={styles.title}>
+            <CustomText
+              style={styles.subTitle}>
+              nghiêm túc thực hiện{`\n`}
+              nhiệm vụ người cầm súng
+            </CustomText>
+          </View>
+          {this.renderList()}
+        </KeyboardScrollView>
         {this.renderFooter()}
       </View>
     );
