@@ -21,7 +21,7 @@ class SplashScreen extends BaseScreen {
 
   _componentDidMount() {
     remoteConfig().setConfigSettings({
-      minimumFetchIntervalMillis: 30000,
+      minimumFetchIntervalMillis: 7200000,
     });
 
     remoteConfig().fetchAndActivate().then((success) => {
