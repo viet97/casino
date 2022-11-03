@@ -273,7 +273,7 @@ class CreateScreen extends BaseScreen {
             <CustomText
               size={22}
               style={styles.title}>
-              TẠO TRẬN MỚI
+              {this.isEdit ? "SỬA TRẬN" : "TẠO TRẬN MỚI"}
             </CustomText>
           </View>
 
