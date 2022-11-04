@@ -16,6 +16,9 @@ import start_game from './start_game.svg';
 import key from './key.svg';
 import skull from './skull.svg';
 import beer from './beer.svg';
+import summary from './summary.svg';
+import share_summary from './share_summary.svg';
+import options from './options.svg';
 
 export default {
   cancel,
@@ -35,5 +38,8 @@ export default {
   start_game,
   key,
   skull,
-  beer
+  beer,
+  summary,
+  share_summary,
+  options
 };

@@ -10,6 +10,7 @@ import SVGIcon from '../../../../assets/SVGIcon';
 import { insets } from '../../../utils/DeviceUtil';
 import FireStoreModule from '../../../modules/FireStoreModule';
 import FightScreen from '../FightScreen';
+import SummaryScreen from '../SummaryScreen';
 
 class DetailScreen extends BaseScreen {
   constructor(props) {
@@ -66,6 +67,13 @@ class DetailScreen extends BaseScreen {
             <HistoryScreen
               game={game} />
           </View>
+          <View
+            style={{
+              flex: 1
+            }}>
+            <SummaryScreen
+              game={game} />
+          </View>
         </ScrollableTabView>
         <View
           style={{
@@ -83,6 +91,7 @@ class DetailScreen extends BaseScreen {
             }}>
             <SVGIcon.fighting width={32} height={32} />
             <CustomText
+              size={9}
               style={styles.bottomText}>
               CHIẾN
             </CustomText>
@@ -93,12 +102,28 @@ class DetailScreen extends BaseScreen {
               flex: 1,
               alignItems: 'center',
               justifyContent: "center",
-              backgroundColor: currentTab ? Colors.violet : Colors.TRANSPARENT
+              backgroundColor: currentTab == 1 ? Colors.violet : Colors.TRANSPARENT
             }}>
             <SVGIcon.history width={32} height={32} />
             <CustomText
+              size={9}
               style={styles.bottomText}>
               LỊCH SỬ
+            </CustomText>
+          </Pressable>
+          <Pressable
+            onPress={() => this.scrollableTabView.goToPage(2)}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: "center",
+              backgroundColor: currentTab == 2 ? Colors.violet : Colors.TRANSPARENT
+            }}>
+            <SVGIcon.summary width={32} height={32} />
+            <CustomText
+              size={9}
+              style={styles.bottomText}>
+              TỔNG KẾT
             </CustomText>
           </Pressable>
         </View>
@@ -107,16 +132,34 @@ class DetailScreen extends BaseScreen {
           onPress={() => this.back()}
           style={styles.back}>
           <SVGIcon.back
-            width={52}
-            height={52}
+            width={50}
+            height={50}
           />
         </Pressable>
+        {currentTab !== 2 ? <Pressable
+          style={styles.rightButton}>
+          <SVGIcon.options
+            width={50}
+            height={50}
+          />
+        </Pressable> : <Pressable
+          style={styles.rightButton}>
+          <SVGIcon.share_summary
+            width={112}
+            height={52}
+          />
+        </Pressable>}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  rightButton: {
+    position: "absolute",
+    top: 52,
+    right: 16
+  },
   back: {
     position: "absolute",
     top: 52,
