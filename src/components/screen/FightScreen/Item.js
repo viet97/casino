@@ -6,6 +6,7 @@ import SVGIcon from '../../../../assets/SVGIcon';
 import BaseElement from '../../element/BaseElement';
 import { isNumber, trim } from 'lodash';
 import Input from '../../common/Input';
+import { IS_ANDROID } from '../../../utils/DeviceUtil';
 
 class Item extends BaseElement {
     constructor(props) {
@@ -83,6 +84,7 @@ class Item extends BaseElement {
                         }}
                         value={this.state.value}
                         style={styles.input}
+                        keyboardType={IS_ANDROID ? "default" : "numbers-and-punctuation"}
                     />
                     <Pressable
                         onPress={this.onDecrease}>
@@ -98,11 +100,11 @@ class Item extends BaseElement {
 const styles = StyleSheet.create({
     input: {
         width: 80,
-        height: 24,
+        height: 48,
         textAlign: 'center',
         fontSize: 18,
         color: Colors.white,
-        padding: 0
+        padding: 0,
     },
     playerName: {
         marginLeft: 16,
@@ -112,7 +114,6 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         paddingHorizontal: 16,
-        paddingVertical: 12,
         alignItems: 'center',
         borderTopColor: Colors.approxAqua,
         borderTopWidth: 2

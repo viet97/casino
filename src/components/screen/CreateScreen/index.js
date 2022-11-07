@@ -10,7 +10,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import CustomText from '../../common/Text';
 import Input from '../../common/Input';
 import moment from 'moment';
-import { size, trim, uniq } from 'lodash';
+import { includes, size, trim, uniq } from 'lodash';
 import TagInput from 'react-native-tags-input';
 import 'react-native-get-random-values';
 
@@ -194,6 +194,14 @@ class CreateScreen extends BaseScreen {
     })
   };
 
+  showDeleteTag = (name) => {
+    if (this.isEdit) {
+      if (!includes(this.game?.members, name)) return true
+      return false
+    }
+    return true
+  }
+
   renderTagInput = () => {
     const { isFocusTagInput } = this.state
 
@@ -223,7 +231,6 @@ class CreateScreen extends BaseScreen {
           onFocus={() => this.setStateSafe({ isFocusTagInput: true })}
           renderTag={({
             item,
-            count,
             deleteTag
           }) => {
             return (
@@ -238,7 +245,7 @@ class CreateScreen extends BaseScreen {
                   size={13}>
                   {item}
                 </CustomText>
-                {!this.isEdit ? <Pressable
+                {this.showDeleteTag(item) ? <Pressable
                   onPress={deleteTag}
                   hitSlop={8}
                   style={{
