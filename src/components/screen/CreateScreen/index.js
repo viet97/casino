@@ -10,7 +10,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import CustomText from '../../common/Text';
 import Input from '../../common/Input';
 import moment from 'moment';
-import { size, trim, uniq } from 'lodash';
+import { includes, size, trim, uniq } from 'lodash';
 import TagInput from 'react-native-tags-input';
 import 'react-native-get-random-values';
 
@@ -21,6 +21,7 @@ import FireStoreModule from '../../../modules/FireStoreModule';
 import LoadingManager from '../../element/Loading/LoadingManager';
 import LocalStorage from '../../../modules/LocalStorage';
 import KeyboardScrollView from '../../element/KeyboardScrollView';
+import { MAX_MEMBER } from '../../../Define';
 
 class CreateScreen extends BaseScreen {
   constructor(props) {
@@ -28,7 +29,7 @@ class CreateScreen extends BaseScreen {
     this.displayName = 'CreateScreen';
     this.game = props.route?.params?.game
     this.isEdit = !!this.game
-    this.maxTag = 12
+    this.maxTag = MAX_MEMBER
 
     this.state = {
       isFocusNameInput: false,
@@ -65,7 +66,7 @@ class CreateScreen extends BaseScreen {
           name,
           members: tags.tagsArray,
         }, this.game.id)
-        this.props.route?.params.onUpdateSucess()
+        this.props.route?.params.onUpdateSuccess && this.props.route?.params.onUpdateSuccess()
       } else {
         await FireStoreModule.addGame({
           name,
@@ -97,7 +98,6 @@ class CreateScreen extends BaseScreen {
         })
       }
     } catch (e) {
-      alert(e)
       console.error("create game error:", e)
     }
     LoadingManager.getInstance().visibleLoading(false)
@@ -187,12 +187,20 @@ class CreateScreen extends BaseScreen {
 
   updateTagState = (state) => {
     if (size(state.tagsArray) > this.maxTag) {
-      return NavigationService.getInstance().showToast({ message: "Số lượng người chơi tối đa là 12" })
+      return NavigationService.getInstance().showToast({ message: "Số lượng người chơi tối đa là " + MAX_MEMBER })
     }
     this.setState({
       tags: state
     })
   };
+
+  showDeleteTag = (name) => {
+    if (this.isEdit) {
+      if (!includes(this.game?.members, name)) return true
+      return false
+    }
+    return true
+  }
 
   renderTagInput = () => {
     const { isFocusTagInput } = this.state
@@ -223,7 +231,6 @@ class CreateScreen extends BaseScreen {
           onFocus={() => this.setStateSafe({ isFocusTagInput: true })}
           renderTag={({
             item,
-            count,
             deleteTag
           }) => {
             return (
@@ -238,7 +245,7 @@ class CreateScreen extends BaseScreen {
                   size={13}>
                   {item}
                 </CustomText>
-                {!this.isEdit ? <Pressable
+                {this.showDeleteTag(item) ? <Pressable
                   onPress={deleteTag}
                   hitSlop={8}
                   style={{

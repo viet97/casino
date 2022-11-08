@@ -11,6 +11,8 @@ import { insets } from '../../../utils/DeviceUtil';
 import FireStoreModule from '../../../modules/FireStoreModule';
 import FightScreen from '../FightScreen';
 import SummaryScreen from '../SummaryScreen';
+import NavigationService from '../../../navigation/NavigationService';
+import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 
 class DetailScreen extends BaseScreen {
   constructor(props) {
@@ -137,6 +139,12 @@ class DetailScreen extends BaseScreen {
           />
         </Pressable>
         {currentTab !== 2 ? <Pressable
+          onPress={() => NavigationService.getInstance().navigate({
+            routerName: ROUTER_NAME.CREATE_GAME.name,
+            params: {
+              game: this.state.game,
+            }
+          })}
           style={styles.rightButton}>
           <SVGIcon.options
             width={50}

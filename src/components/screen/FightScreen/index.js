@@ -10,8 +10,9 @@ import SVGIcon from '../../../../assets/SVGIcon';
 import Item from './Item';
 import KeyboardScrollView from '../../element/KeyboardScrollView';
 import BaseElement from '../../element/BaseElement';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, size } from 'lodash';
 import FireStoreModule from '../../../modules/FireStoreModule';
+import { MAX_MEMBER } from '../../../Define';
 
 class FightScreen extends BaseElement {
   constructor(props) {
@@ -30,8 +31,17 @@ class FightScreen extends BaseElement {
     }
   }
   initialListRef = () => {
-    this.listRef = this.props.game?.members.map(() => createRef())
+    //max = 12
+    this.listRef = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}].map(() => createRef())
   }
+
+  // UNSAFE_componentWillReceiveProps(nextProps) {
+  //   const currentGameMembers = this.props?.game?.members
+  //   const newGameMembers = nextProps?.game?.members
+  //   if (size(newGameMembers) !== size(currentGameMembers)) {
+  //     this.initialListRef()
+  //   }
+  // }
 
   _componentDidMount() {
   }
@@ -41,7 +51,6 @@ class FightScreen extends BaseElement {
       <Item
         onChangeValue={(value) => {
           this.match[item] = !isNaN(Number(value)) ? Number(value) : 0
-          console.log("this.match", this.match)
         }}
         getOtherValue={this.getOtherValue}
         ref={this.listRef[index]}
@@ -96,7 +105,7 @@ class FightScreen extends BaseElement {
     try {
       FireStoreModule.updateGame(newGame, newGame.id)
       for (const ref of this.listRef) {
-        ref.current.clearData()
+        ref?.current?.clearData && ref.current.clearData()
       }
     } catch (e) {
       console.error("update game error:", e)
@@ -131,7 +140,7 @@ class FightScreen extends BaseElement {
         <Pressable
           onPress={() => {
             for (const ref of this.listRef) {
-              ref.current.clearData()
+              ref?.current?.clearData && ref.current.clearData()
             }
           }}
           hitSlop={16}>

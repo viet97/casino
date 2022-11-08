@@ -73,6 +73,22 @@ const DEFINE_REQUIRE = {
     source: require('../../assets/images/splash.gif'),
     type: TYPE_IMAGE.PNG,
   },
+  top1: {
+    source: require('../../assets/images/top1.png'),
+    type: TYPE_IMAGE.PNG,
+  },
+  top2: {
+    source: require('../../assets/images/top2.png'),
+    type: TYPE_IMAGE.PNG,
+  },
+  top3: {
+    source: require('../../assets/images/top3.png'),
+    type: TYPE_IMAGE.PNG,
+  },
+  summary: {
+    source: require('../../assets/images/summary.gif'),
+    type: TYPE_IMAGE.PNG,
+  },
 };
 
 export const Images = {

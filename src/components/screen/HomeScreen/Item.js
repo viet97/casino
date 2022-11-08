@@ -26,10 +26,10 @@ class Item extends BaseElement {
         return <View
             style={styles.editRow}>
             <Pressable
+                onPress={() => this.setStateSafe({ isDeleteVisible: true })}
                 style={styles.delete}>
                 <SVGIcon.skull width={24} height={24} />
                 <CustomText
-                    onPress={() => this.setStateSafe({ isDeleteVisible: true })}
                     size={11}
                     style={{
                         lineHeight: 22,
@@ -43,7 +43,7 @@ class Item extends BaseElement {
                     routerName: ROUTER_NAME.CREATE_GAME.name,
                     params: {
                         game: item,
-                        onUpdateSucess: () => {
+                        onUpdateSuccess: () => {
                             this.setStateSafe({ isEdit: false })
                         }
                     }
