@@ -72,7 +72,13 @@ class Item extends BaseElement {
                     </Pressable>
                     <Input
                         selectTextOnFocus
-                        onBlur={e => {
+                        // onBlur={e => {
+                        //     if (isNaN(Number(e.nativeEvent.text)) || !Number(e.nativeEvent.text)) {
+                        //         this.setStateSafe({ value: "0" })
+                        //         this.props.onChangeValue(0)
+                        //     }
+                        // }}
+                        onEndEditing={e => {
                             if (isNaN(Number(e.nativeEvent.text)) || !Number(e.nativeEvent.text)) {
                                 this.setStateSafe({ value: "0" })
                                 this.props.onChangeValue(0)

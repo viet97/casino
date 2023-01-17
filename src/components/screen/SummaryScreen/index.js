@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Images } from '../../../themes/Images';
@@ -8,6 +8,8 @@ import BaseElement from '../../element/BaseElement';
 import CustomText from '../../common/Text';
 import SVGIcon from '../../../../assets/SVGIcon';
 import { orderBy, size, trim } from 'lodash';
+import ViewShot from 'react-native-view-shot';
+import Share from 'react-native-share';
 
 class SummaryScreen extends BaseElement {
   constructor(props) {
@@ -30,6 +32,8 @@ class SummaryScreen extends BaseElement {
       SVGIcon.top3_label,
       SVGIcon.top4_label,
     ]
+
+    this.viewShot = createRef()
   }
 
   getListScore = () => {
@@ -185,9 +189,23 @@ class SummaryScreen extends BaseElement {
     </View>
   }
 
+  shareSummary = () => {
+    this.viewShot?.current && this.viewShot.current.capture().then(uri => {
+      Share.open({
+        url: uri,
+      })
+    })
+  }
+
   renderContent() {
     return (
-      <View style={styles.container} >
+      <ViewShot
+        options={{
+          fileName: this.props.game?.name,
+          quality: 0.8
+        }}
+        ref={this.viewShot}
+        style={styles.container} >
         <View>
           <Image
             source={Images.assets.summary.source}
@@ -196,7 +214,7 @@ class SummaryScreen extends BaseElement {
         </View>
         {this.renderTop()}
         {this.renderList()}
-      </View>
+      </ViewShot>
     );
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import BaseScreen from '../BaseScreen';
@@ -23,6 +23,7 @@ class DetailScreen extends BaseScreen {
     };
 
     this.displayName = 'DetailScreen';
+    this.summaryRef = createRef()
   }
 
   async _componentDidMount() {
@@ -74,6 +75,7 @@ class DetailScreen extends BaseScreen {
               flex: 1
             }}>
             <SummaryScreen
+              ref={this.summaryRef}
               game={game} />
           </View>
         </ScrollableTabView>
@@ -151,6 +153,9 @@ class DetailScreen extends BaseScreen {
             height={50}
           />
         </Pressable> : <Pressable
+          onPress={() => {
+            this.summaryRef?.current && this.summaryRef.current.shareSummary()
+          }}
           style={styles.rightButton}>
           <SVGIcon.share_summary
             width={112}
