@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>casino</string>
+	<string>Ghi Điểm</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -35,8 +35,8 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Our App use Location for using Map</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fernando.ttf</string>
@@ -53,5 +53,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+    <key>UIRequiresFullScreen</key>
+    <true/>
 </dict>
 </plist>
