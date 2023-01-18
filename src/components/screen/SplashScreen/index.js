@@ -28,6 +28,9 @@ class SplashScreen extends BaseScreen {
     if (enabled) {
       messaging()
         .getToken()
+        .catch(e => {
+          console.error(e)
+        })
     }
   }
 
