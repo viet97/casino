@@ -5,6 +5,7 @@ import FireStoreModule from '../../../modules/FireStoreModule';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 import NavigationService from '../../../navigation/NavigationService';
 import remoteConfig from '@react-native-firebase/remote-config';
+import messaging from '@react-native-firebase/messaging';
 
 import { Images } from '../../../themes/Images';
 import { widthDevice } from '../../../utils/DeviceUtil';
@@ -19,11 +20,17 @@ class SplashScreen extends BaseScreen {
     this.displayName = 'SplashScreen';
   }
 
+  async requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  }
   _componentDidMount() {
+    this.requestUserPermission()
     remoteConfig().setConfigSettings({
       minimumFetchIntervalMillis: 7200000,
     });
-
     remoteConfig().fetchAndActivate().then((success) => {
       const welcome_message = remoteConfig().getValue('welcome_message').asString();
       this.setStateSafe({ welcome_message })
