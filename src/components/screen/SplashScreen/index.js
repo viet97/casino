@@ -25,7 +25,12 @@ class SplashScreen extends BaseScreen {
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
+      messaging()
+        .getToken()
+    }
   }
+
   _componentDidMount() {
     this.requestUserPermission()
     remoteConfig().setConfigSettings({
