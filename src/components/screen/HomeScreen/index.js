@@ -55,12 +55,12 @@ class HomeScreen extends BaseScreen {
       <LinearGradient
         style={styles.bottom}
         start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={['#05131C', "rgba(5, 19, 28, 0)"]} >
-        <Pressable>
+        {/* <Pressable>
           <SVGIcon.scanner
             width={56}
             height={56}
           />
-        </Pressable>
+        </Pressable> */}
         <Pressable
           onPress={() => NavigationService.getInstance().navigate({
             routerName: ROUTER_NAME.CREATE_GAME.name,
@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
     height: 52,
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 12,
     justifyContent: 'center',
     borderWidth: 3,
     borderColor: Colors.skema,

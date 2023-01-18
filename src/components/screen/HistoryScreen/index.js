@@ -15,13 +15,27 @@ class HistoryScreen extends BaseElement {
   constructor(props) {
     super(props);
     this.width = (widthDevice - 2) / this.props.game.members.length
-    if (this.width < 100) {
-      this.width = 80
+    if (this.width < (widthDevice - 2) / 5) {
+      this.width = (widthDevice - 2) / 5 - 4
     }
     this.state = {
       widthArr: this.props.game.members.map(() => this.width)
     };
     this.displayName = 'HistoryScreen';
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const nextGame = nextProps?.game
+    const game = this.props?.game
+    if (nextGame?.members > game?.members) {
+      this.width = (widthDevice - 2) / this.props.game.members.length
+      if (this.width < (widthDevice - 2) / 5) {
+        this.width = (widthDevice - 2) / 5 - 4
+      }
+      this.setStateSafe({
+        widthArr: nextGame?.members?.map(() => this.width)
+      });
+    }
   }
 
   getTableHead = () => {
@@ -110,6 +124,8 @@ class HistoryScreen extends BaseElement {
   }
 
   renderTable = () => {
+    console.log("gamee", this.props.game)
+
     const { widthArr } = this.state
     return (
       <ScrollView
