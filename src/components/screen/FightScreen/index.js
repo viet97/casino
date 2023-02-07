@@ -13,6 +13,7 @@ import BaseElement from '../../element/BaseElement';
 import { cloneDeep, size } from 'lodash';
 import FireStoreModule from '../../../modules/FireStoreModule';
 import { MAX_MEMBER } from '../../../Define';
+import Tooltip from '../../element/Tooltip';
 
 class FightScreen extends BaseElement {
   constructor(props) {
@@ -49,6 +50,11 @@ class FightScreen extends BaseElement {
   renderItem = ({ item, index }) => {
     return (
       <Item
+        showHint={this.props.showHint}
+        onCloseHint={() => {
+          this.setStateSafe({ visibleHint1: true })
+          this.props.onCloseHint()
+        }}
         onChangeValue={(value) => {
           this.match[item] = !isNaN(Number(value)) ? Number(value) : 0
         }}
@@ -60,14 +66,16 @@ class FightScreen extends BaseElement {
   }
 
   renderList = () => {
-    return <FlatList
-      keyboardShouldPersistTaps={"handled"}
-      bounces={false}
-      data={this.props.game?.members}
-      style={styles.list}
-      keyExtractor={(item) => item}
-      renderItem={this.renderItem}
-    />
+    return <View>
+      <FlatList
+        keyboardShouldPersistTaps={"handled"}
+        bounces={false}
+        data={this.props.game?.members}
+        style={styles.list}
+        keyExtractor={(item) => item}
+        renderItem={this.renderItem}
+      />
+    </View>
   }
 
   addMatch = async () => {
@@ -127,25 +135,51 @@ class FightScreen extends BaseElement {
   renderFooter = () => {
     return (<View
       style={styles.footerContainer}>
+
       <View
-        style={styles.footerButtonContainer}>
-        <Pressable
-          onPress={this.addMatch}
-          hitSlop={16}>
-          <SVGIcon.ticked width={32} height={32} />
-        </Pressable>
-      </View>
-      <View
-        style={styles.footerButtonContainer}>
-        <Pressable
-          onPress={() => {
-            for (const ref of this.listRef) {
-              ref?.current?.clearData && ref.current.clearData()
-            }
+        style={[styles.footerButtonContainer]}>
+        <Tooltip
+          visible={this.state.visibleHint1}
+          onClose={() => {
+            setTimeout(() => {
+              this.setStateSafe({
+                visibleHint1: false,
+                visibleHint2: true
+              })
+            }, 500)
           }}
-          hitSlop={16}>
-          <SVGIcon.cancel width={32} height={32} />
-        </Pressable>
+          content="Xác nhận cộng điểm"
+        >
+          <Pressable
+            onPress={this.addMatch}
+            hitSlop={16}>
+            <SVGIcon.ticked width={32} height={32} />
+          </Pressable>
+        </Tooltip>
+
+      </View>
+
+      <View
+        style={styles.footerButtonContainer}>
+        <Tooltip
+          visible={this.state.visibleHint2}
+          onClose={() => {
+            this.setStateSafe({
+              visibleHint2: false
+            })
+          }}
+          content="Xoá điểm"
+        >
+          <Pressable
+            onPress={() => {
+              for (const ref of this.listRef) {
+                ref?.current?.clearData && ref.current.clearData()
+              }
+            }}
+            hitSlop={16}>
+            <SVGIcon.cancel width={32} height={32} />
+          </Pressable>
+        </Tooltip>
       </View>
     </View>)
   }

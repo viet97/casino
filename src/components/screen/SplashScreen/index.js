@@ -47,7 +47,6 @@ class SplashScreen extends BaseScreen {
           resolve("success")
         }, 3000)
       })
-
       return Promise.all([delayPromise,
         FireStoreModule.auth()
       ])

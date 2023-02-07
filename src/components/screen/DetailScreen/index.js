@@ -7,12 +7,14 @@ import HistoryScreen from '../HistoryScreen';
 import CustomText from '../../common/Text';
 import { ScrollableTabView } from '../../common';
 import SVGIcon from '../../../../assets/SVGIcon';
-import { insets } from '../../../utils/DeviceUtil';
+import { insets, widthDevice } from '../../../utils/DeviceUtil';
 import FireStoreModule from '../../../modules/FireStoreModule';
 import FightScreen from '../FightScreen';
 import SummaryScreen from '../SummaryScreen';
 import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
+import Tooltip from '../../element/Tooltip';
+import LocalStorage, { DEFINE_KEY } from '../../../modules/LocalStorage';
 
 class DetailScreen extends BaseScreen {
   constructor(props) {
@@ -29,6 +31,15 @@ class DetailScreen extends BaseScreen {
   async _componentDidMount() {
     this.gameListener = FireStoreModule.listenGameChange(this.props.route?.params?.game?.id, game => {
       this.setStateSafe({ game })
+    })
+
+    LocalStorage.getItem(DEFINE_KEY.WENT_TO_DETAIL).then(wentToDetail => {
+      if (!wentToDetail) {
+        setTimeout(() => {
+          this.setStateSafe({ visibleHint: true })
+          LocalStorage.setItem(DEFINE_KEY.WENT_TO_DETAIL, true)
+        }, 500)
+      }
     })
   }
 
@@ -60,6 +71,8 @@ class DetailScreen extends BaseScreen {
               flex: 1
             }}>
             <FightScreen
+              showHint={this.state.childrendHint}
+              onCloseHint={() => this.setStateSafe({ childrendHint: false })}
               game={game}
             />
           </View>
@@ -83,53 +96,114 @@ class DetailScreen extends BaseScreen {
           style={{
             flexDirection: "row",
             height: 73 + (insets.bottom ? 16 : 0),
-            backgroundColor: Colors.toyota
+            backgroundColor: Colors.toyota,
           }}>
-          <Pressable
-            onPress={() => this.scrollableTabView.goToPage(0)}
+          <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: "center",
-              backgroundColor: !currentTab ? Colors.violet : Colors.TRANSPARENT
+              width: widthDevice / 3,
+              height: 73 + (insets.bottom ? 16 : 0),
             }}>
-            <SVGIcon.fighting width={32} height={32} />
-            <CustomText
-              size={9}
-              style={styles.bottomText}>
-              CHIẾN
-            </CustomText>
-          </Pressable>
-          <Pressable
-            onPress={() => this.scrollableTabView.goToPage(1)}
+            <Tooltip
+              visible={this.state.visibleHint}
+              onClose={() => {
+                setTimeout(() => {
+                  this.setStateSafe({
+                    visibleHint1: true,
+                    visibleHint: false
+                  })
+                }, 500)
+              }}
+              content="Ghi điểm"
+            >
+              <Pressable
+                onPress={() => this.scrollableTabView.goToPage(0)}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: "center",
+                  height: '100%',
+                  width: widthDevice / 3,
+                  backgroundColor: !currentTab ? Colors.violet : Colors.TRANSPARENT
+                }}>
+                <SVGIcon.fighting width={32} height={32} />
+                <CustomText
+                  size={9}
+                  style={styles.bottomText}>
+                  CHIẾN
+                </CustomText>
+              </Pressable>
+            </Tooltip>
+          </View>
+
+          <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: "center",
-              backgroundColor: currentTab == 1 ? Colors.violet : Colors.TRANSPARENT
+              width: widthDevice / 3,
+              height: 73 + (insets.bottom ? 16 : 0),
             }}>
-            <SVGIcon.history width={32} height={32} />
-            <CustomText
-              size={9}
-              style={styles.bottomText}>
-              LỊCH SỬ
-            </CustomText>
-          </Pressable>
-          <Pressable
-            onPress={() => this.scrollableTabView.goToPage(2)}
+            <Tooltip
+              visible={this.state.visibleHint1}
+              onClose={() => {
+                setTimeout(() => {
+                  this.setStateSafe({
+                    visibleHint2: true,
+                    visibleHint1: false
+                  })
+                }, 500)
+              }}
+              content="Lịch sử các trận đấu"
+            >
+              <Pressable
+                onPress={() => this.scrollableTabView.goToPage(1)}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: "center",
+                  height: '100%',
+                  width: widthDevice / 3,
+                  backgroundColor: currentTab === 1 ? Colors.violet : Colors.TRANSPARENT
+                }}>
+                <SVGIcon.history width={32} height={32} />
+                <CustomText
+                  size={9}
+                  style={styles.bottomText}>
+                  LỊCH SỬ
+                </CustomText>
+              </Pressable>
+            </Tooltip>
+          </View>
+          <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: "center",
-              backgroundColor: currentTab == 2 ? Colors.violet : Colors.TRANSPARENT
+              width: widthDevice / 3,
+              height: 73 + (insets.bottom ? 16 : 0),
             }}>
-            <SVGIcon.summary width={32} height={32} />
-            <CustomText
-              size={9}
-              style={styles.bottomText}>
-              TỔNG KẾT
-            </CustomText>
-          </Pressable>
+            <Tooltip
+              visible={this.state.visibleHint2}
+              onClose={() => {
+                setTimeout(() => {
+                  this.setStateSafe({
+                    visibleHint2: false,
+                    childrendHint: true
+                  })
+                }, 500)
+              }}
+              content="Xếp hạng trận đấu"
+            >
+              <Pressable
+                onPress={() => this.scrollableTabView.goToPage(2)}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: "center",
+                  height: '100%',
+                  width: widthDevice / 3,
+                  backgroundColor: currentTab === 2 ? Colors.violet : Colors.TRANSPARENT
+                }}>
+                <SVGIcon.summary width={32} height={32} />
+                <CustomText
+                  size={9}
+                  style={styles.bottomText}>
+                  TỔNG KẾT
+                </CustomText>
+              </Pressable>
+            </Tooltip>
+          </View>
         </View>
 
         <Pressable

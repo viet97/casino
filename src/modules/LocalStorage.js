@@ -17,6 +17,8 @@ export const DEFINE_KEY = {
   // refresh
   ACCESS_TOKEN: md5Key('access_token' + server.secret),
   LIST_NAME: md5Key('LIST_NAME' + server.secret),
+  CREATED_GAME: md5Key('CREATED_GAME' + server.secret),
+  WENT_TO_DETAIL: md5Key('WENT_TO_DETAIL' + server.secret),
 };
 
 const isExist = async key => {

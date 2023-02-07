@@ -12,6 +12,8 @@ import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 import FireStoreModule from '../../../modules/FireStoreModule';
 import Item from './Item';
+import Tooltip from '../../element/Tooltip';
+import LocalStorage, { DEFINE_KEY } from '../../../modules/LocalStorage';
 
 const COVER_HEIGHT = widthDevice * 260 / 393
 
@@ -19,6 +21,7 @@ class HomeScreen extends BaseScreen {
   constructor(props) {
     super(props);
     this.state = {
+      visibleHint: false
     };
 
     this.displayName = 'HomeScreen';
@@ -55,35 +58,46 @@ class HomeScreen extends BaseScreen {
       <LinearGradient
         style={styles.bottom}
         start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={['#05131C', "rgba(5, 19, 28, 0)"]} >
-        {/* <Pressable>
-          <SVGIcon.scanner
-            width={56}
-            height={56}
-          />
-        </Pressable> */}
-        <Pressable
-          onPress={() => NavigationService.getInstance().navigate({
-            routerName: ROUTER_NAME.CREATE_GAME.name,
-            params: {
-              listGame: this.state.listGame
-            }
-          })}
-          style={styles.createGameButton}>
-          <Image
-            style={styles.scannerIcon}
-            source={Images.assets.create_game_bg.source}
-          />
-          <SVGIcon.crown />
-          <CustomText
-            style={styles.createGame}>
-            Tạo trận mới
-          </CustomText>
-        </Pressable>
+        <Tooltip
+          onClose={() => {
+            LocalStorage.setItem(DEFINE_KEY.CREATED_GAME, true)
+          }}
+          childrenWrapperStyle={{
+            left: 22
+          }}
+          visible={this.state.visibleHint}
+          content="Bắt đầu tạo trận tại đây">
+          <Pressable
+            onPress={() => NavigationService.getInstance().navigate({
+              routerName: ROUTER_NAME.CREATE_GAME.name,
+              params: {
+                listGame: this.state.listGame
+              }
+            })}
+            style={styles.createGameButton}>
+            <Image
+              style={styles.scannerIcon}
+              source={Images.assets.create_game_bg.source}
+            />
+            <SVGIcon.crown />
+            <CustomText
+              style={styles.createGame}>
+              Tạo trận mới
+            </CustomText>
+          </Pressable>
+        </Tooltip>
       </LinearGradient>
     )
   }
 
   async _componentDidMount() {
+    LocalStorage.getItem(DEFINE_KEY.CREATED_GAME).then(isCreatedGame => {
+      if (!isCreatedGame) {
+        setTimeout(() => {
+          this.setStateSafe({ visibleHint: true })
+        }, 500);
+      }
+    })
     this.gamesListener = await FireStoreModule.listenGamesChange(listGame => {
       this.setStateSafe({ listGame })
     })
@@ -91,6 +105,7 @@ class HomeScreen extends BaseScreen {
 
   _componentUnMount() {
     this.gamesListener && this.gamesListener()
+
   }
 
   renderContent() {
@@ -136,7 +151,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 3,
     borderColor: Colors.skema,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    width: '100%',
+    width: widthDevice - 46
   },
   bottom: {
     flexDirection: "row",
