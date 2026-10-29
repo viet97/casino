@@ -1,13 +1,10 @@
 import React from 'react';
 import BaseElement from '../BaseElement';
 import {
-  findNodeHandle,
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
-  StatusBar,
   TextInput,
-  UIManager,
 } from 'react-native';
 import { IS_ANDROID } from '../../../utils/DeviceUtil';
 
@@ -33,47 +30,19 @@ export default class KeyboardScrollView extends BaseElement {
     );
   }
 
-  getScrollResponder = () => {
-    return (
-      this.scrollView &&
-      this.scrollView.current &&
-      this.scrollView.current.getScrollResponder &&
-      this.scrollView.current.getScrollResponder()
-    );
-  };
   _updateKeyboardSpace = (frames) => {
     // Automatically scroll to focused TextInput
     let keyboardHeight = frames.endCoordinates.height;
     this.setState({ keyboardHeight });
-    const currentlyFocusedField = TextInput.State.currentlyFocusedInput
-      ? findNodeHandle(TextInput.State.currentlyFocusedInput())
-      : TextInput.State.currentlyFocusedField();
-    const responder = this.getScrollResponder();
-    if (!currentlyFocusedField || !responder) {
+    const focusedInput = TextInput.State.currentlyFocusedInput();
+    if (!focusedInput || !this.scrollView.current || IS_ANDROID) {
       return;
     }
-    UIManager.viewIsDescendantOf(
-      currentlyFocusedField,
-      responder.getInnerViewNode(),
-      (isAncestor) => {
-        if (isAncestor) {
-          UIManager.measureInWindow(
-            currentlyFocusedField,
-            (inputX, inputY, inputWidth, inputHeight) => {
-              if (!IS_ANDROID) {
-                if (inputY + inputHeight >= this.scrollHeight) {
-                  this.scrollTo(
-                    this.y + (inputY - this.scrollHeight + inputHeight)
-                  );
-                }
-              } else {
-                //android
-              }
-            }
-          );
-        }
+    focusedInput.measureInWindow((inputX, inputY, inputWidth, inputHeight) => {
+      if (inputY + inputHeight >= this.scrollHeight) {
+        this.scrollTo(this.y + (inputY - this.scrollHeight + inputHeight));
       }
-    );
+    });
   };
 
   scrollTo(y) {
@@ -98,8 +67,8 @@ export default class KeyboardScrollView extends BaseElement {
     this.x = e?.nativeEvent?.contentOffset?.x;
   };
 
-  componentWillUnmount() {
-    this.keyboardDidHideListener && this.keyboardDidHideListener.remove();
+  _componentWillUnmount() {
+    this.keyboardDidShowListener && this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener && this.keyboardDidHideListener.remove();
   }
 

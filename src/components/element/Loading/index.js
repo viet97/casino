@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import PropTypes from 'prop-types';
 
 import BaseElement from '../BaseElement';
 import { EmitterManager } from '../../../modules/EmitterManager';
@@ -41,7 +40,7 @@ class Loading extends BaseElement {
 
   renderContent() {
     const { loading } = this.state;
-    const isShow = loading || this.props.loading;
+    const isShow = loading;
     let containerStyle = {
       ...StyleSheet.absoluteFill,
       flex: 1,
@@ -67,15 +66,5 @@ class Loading extends BaseElement {
     return null;
   }
 }
-
-Loading.propTypes = {
-  isLoadingVideo: PropTypes.bool,
-  loading: PropTypes.bool,
-};
-
-Loading.defaultProps = {
-  isLoadingVideo: false,
-  loading: false,
-};
 
 export default Loading;

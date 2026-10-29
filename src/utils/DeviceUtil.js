@@ -1,18 +1,18 @@
 import { Dimensions, Platform, PixelRatio, StatusBar } from 'react-native';
 import deviceInfoModule from 'react-native-device-info';
 import RNDeviceInfo from 'react-native-device-info';
-import StaticSafeAreaInsets from 'react-native-static-safe-area-insets';
+import { initialWindowMetrics } from 'react-native-safe-area-context';
 
 const guidelineBaseWidth = 375;
 const guidelineBaseHeight = 667;
 
 export const IS_ANDROID = Platform.OS === 'android';
 
-export const insets = {
-  top: StaticSafeAreaInsets.safeAreaInsetsTop,
-  bottom: StaticSafeAreaInsets.safeAreaInsetsBottom,
-  left: StaticSafeAreaInsets.safeAreaInsetsLeft,
-  right: StaticSafeAreaInsets.safeAreaInsetsRight,
+export const insets = initialWindowMetrics?.insets || {
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
 };
 
 const { width, height } = Dimensions.get('screen');
@@ -193,7 +193,6 @@ export const iosDevicesInch = {
   'iPadPro9.7-inch': 9.7,
   // iPad 5th Gen, 2017
   // Pro 12.9-inch, 2017
-  'iPadPro12.9-inch': 12.9,
   // Pro 10.5-inch, 2017
   'iPadPro10.5-inch': 10.5,
   // iPad 6th Gen, 2018

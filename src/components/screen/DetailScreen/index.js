@@ -5,7 +5,6 @@ import BaseScreen from '../BaseScreen';
 import { Colors } from '../../../themes/Colors';
 import HistoryScreen from '../HistoryScreen';
 import CustomText from '../../common/Text';
-import { ScrollableTabView } from '../../common';
 import SVGIcon from '../../../../assets/SVGIcon';
 import { insets, widthDevice } from '../../../utils/DeviceUtil';
 import FireStoreModule from '../../../modules/FireStoreModule';
@@ -15,6 +14,8 @@ import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 import Tooltip from '../../element/Tooltip';
 import LocalStorage, { DEFINE_KEY } from '../../../modules/LocalStorage';
+import AdsModule from '../../../modules/AdsModule';
+import Banner from '../../element/Banner';
 
 class DetailScreen extends BaseScreen {
   constructor(props) {
@@ -28,7 +29,7 @@ class DetailScreen extends BaseScreen {
     this.summaryRef = createRef()
   }
 
-  async _componentDidMount() {
+  _componentDidMount() {
     this.gameListener = FireStoreModule.listenGameChange(this.props.route?.params?.game?.id, game => {
       this.setStateSafe({ game })
     })
@@ -43,65 +44,50 @@ class DetailScreen extends BaseScreen {
     })
   }
 
-  async _componentUnMount() {
+  _componentWillUnmount() {
     this.gameListener && this.gameListener()
+    AdsModule.showInterstitial()
+  }
+
+  goToTab = (currentTab) => this.setStateSafe({ currentTab })
+
+  renderTab = (index, content) => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          display: this.state.currentTab === index ? 'flex' : 'none'
+        }}>
+        {content}
+      </View>
+    )
   }
 
   renderContent() {
     const { currentTab, game } = this.state
     return (
       <View style={styles.container}>
-        <ScrollableTabView
-          locked
-          contentProps={{
-            bounces: false,
-            keyboardShouldPersistTaps: "handled"
-          }}
-          scrollWithoutAnimation
-          renderTabBar={() => <View />}
-          ref={ref => this.scrollableTabView = ref}
-          style={{ flex: 1 }}
-          tabBarActiveTextColor={Colors.black}
-          prerenderingSiblingsNumber={0}
-          initialPage={0}
-          onChangeTab={({ i }) => this.setStateSafe({ currentTab: i })}
-        >
-          <View
-            style={{
-              flex: 1
-            }}>
-            <FightScreen
-              showHint={this.state.childrendHint}
-              onCloseHint={() => this.setStateSafe({ childrendHint: false })}
-              game={game}
-            />
-          </View>
-          <View
-            style={{
-              flex: 1
-            }}>
-            <HistoryScreen
-              game={game} />
-          </View>
-          <View
-            style={{
-              flex: 1
-            }}>
-            <SummaryScreen
-              ref={this.summaryRef}
-              game={game} />
-          </View>
-        </ScrollableTabView>
+        {this.renderTab(0, <FightScreen
+          showHint={this.state.childrendHint}
+          onCloseHint={() => this.setStateSafe({ childrendHint: false })}
+          game={game}
+        />)}
+        {this.renderTab(1, <HistoryScreen
+          game={game} />)}
+        {this.renderTab(2, <SummaryScreen
+          ref={this.summaryRef}
+          game={game} />)}
+        {currentTab !== 0 ? <Banner /> : null}
         <View
           style={{
             flexDirection: "row",
-            height: 73 + (insets.bottom ? 16 : 0),
+            height: 73 + insets.bottom,
             backgroundColor: Colors.toyota,
           }}>
           <View
             style={{
               width: widthDevice / 3,
-              height: 73 + (insets.bottom ? 16 : 0),
+              height: 73 + insets.bottom,
             }}>
             <Tooltip
               visible={this.state.visibleHint}
@@ -116,7 +102,7 @@ class DetailScreen extends BaseScreen {
               content="Ghi điểm"
             >
               <Pressable
-                onPress={() => this.scrollableTabView.goToPage(0)}
+                onPress={() => this.goToTab(0)}
                 style={{
                   alignItems: 'center',
                   justifyContent: "center",
@@ -137,7 +123,7 @@ class DetailScreen extends BaseScreen {
           <View
             style={{
               width: widthDevice / 3,
-              height: 73 + (insets.bottom ? 16 : 0),
+              height: 73 + insets.bottom,
             }}>
             <Tooltip
               visible={this.state.visibleHint1}
@@ -152,7 +138,7 @@ class DetailScreen extends BaseScreen {
               content="Lịch sử các trận đấu"
             >
               <Pressable
-                onPress={() => this.scrollableTabView.goToPage(1)}
+                onPress={() => this.goToTab(1)}
                 style={{
                   alignItems: 'center',
                   justifyContent: "center",
@@ -172,7 +158,7 @@ class DetailScreen extends BaseScreen {
           <View
             style={{
               width: widthDevice / 3,
-              height: 73 + (insets.bottom ? 16 : 0),
+              height: 73 + insets.bottom,
             }}>
             <Tooltip
               visible={this.state.visibleHint2}
@@ -187,7 +173,7 @@ class DetailScreen extends BaseScreen {
               content="Xếp hạng trận đấu"
             >
               <Pressable
-                onPress={() => this.scrollableTabView.goToPage(2)}
+                onPress={() => this.goToTab(2)}
                 style={{
                   alignItems: 'center',
                   justifyContent: "center",

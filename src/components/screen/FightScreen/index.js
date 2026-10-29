@@ -10,9 +10,8 @@ import SVGIcon from '../../../../assets/SVGIcon';
 import Item from './Item';
 import KeyboardScrollView from '../../element/KeyboardScrollView';
 import BaseElement from '../../element/BaseElement';
-import { cloneDeep, size } from 'lodash';
+import { cloneDeep } from 'lodash';
 import FireStoreModule from '../../../modules/FireStoreModule';
-import { MAX_MEMBER } from '../../../Define';
 import Tooltip from '../../element/Tooltip';
 
 class FightScreen extends BaseElement {
@@ -20,15 +19,15 @@ class FightScreen extends BaseElement {
     super(props);
     this.state = {};
     this.displayName = 'FightScreen';
-    NavigationService.getInstance(props.navigation)
     this.initialMatch()
     this.initialListRef()
   }
 
   initialMatch = () => {
+    const oldMatch = this.match || {}
     this.match = {}
-    for (const member of this.props.game?.members) {
-      this.match[member] = 0
+    for (const member of this.props.game?.members || []) {
+      this.match[member] = oldMatch[member] || 0
     }
   }
   initialListRef = () => {
@@ -36,15 +35,11 @@ class FightScreen extends BaseElement {
     this.listRef = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}].map(() => createRef())
   }
 
-  // UNSAFE_componentWillReceiveProps(nextProps) {
-  //   const currentGameMembers = this.props?.game?.members
-  //   const newGameMembers = nextProps?.game?.members
-  //   if (size(newGameMembers) !== size(currentGameMembers)) {
-  //     this.initialListRef()
-  //   }
-  // }
-
-  _componentDidMount() {
+  componentDidUpdate(prevProps) {
+    // Members can be added when editing the game
+    if (prevProps.game?.members !== this.props.game?.members) {
+      this.initialMatch()
+    }
   }
 
   renderItem = ({ item, index }) => {
@@ -107,16 +102,16 @@ class FightScreen extends BaseElement {
     }
     const newGame = cloneDeep(this.props.game)
     newGame.matches = [
-      this.match,
+      { ...this.match },
       ...(newGame.matches || [])
     ]
-    try {
-      FireStoreModule.updateGame(newGame, newGame.id)
-      for (const ref of this.listRef) {
-        ref?.current?.clearData && ref.current.clearData()
-      }
-    } catch (e) {
+    // Don't wait for server ack, firestore keeps the write offline
+    FireStoreModule.updateGame(newGame, newGame.id).catch(e => {
       console.error("update game error:", e)
+      NavigationService.getInstance().showToast({ message: "Lưu điểm thất bại, vui lòng thử lại" })
+    })
+    for (const ref of this.listRef) {
+      ref?.current?.clearData && ref.current.clearData()
     }
   }
 

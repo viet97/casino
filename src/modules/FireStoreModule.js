@@ -1,10 +1,23 @@
-import firestore from '@react-native-firebase/firestore';
+import {
+    getFirestore,
+    collection,
+    doc,
+    setDoc,
+    updateDoc,
+    deleteDoc,
+    onSnapshot,
+    Timestamp,
+} from '@react-native-firebase/firestore';
+import { getAuth, signInWithCustomToken } from '@react-native-firebase/auth';
 import { orderBy } from 'lodash';
-import deviceInfoModule from 'react-native-device-info';
-import auth from '@react-native-firebase/auth';
+import { getUniqueIdSync } from 'react-native-device-info';
+
+// Same value as getUniqueId() of react-native-device-info 7.x, keep it to not lose old games
+const uid = getUniqueIdSync()
+const gamesPath = `users/${uid}/games`
 
 const FireStoreModule = {
-    uid: deviceInfoModule.getUniqueId(),
+    uid,
     auth: async function () {
         try {
             const response = await fetch("https://us-central1-casino-ledger.cloudfunctions.net/apis/login", {
@@ -17,64 +30,46 @@ const FireStoreModule = {
             }).then(response => response.json())
 
             if (response?.token) {
-                auth().signInWithCustomToken(response.token)
+                await signInWithCustomToken(getAuth(), response.token)
             }
         } catch (e) {
             console.error("auth error:", e)
         }
     },
     addGame: async function (game, id) {
-        delete game.id
-        const response = await firestore()
-            .collection(`users/${this.uid}/games`)
-            .doc(id)
-            .set({
-                ...game,
-                created: firestore.Timestamp.now().toMillis(),
-                updated: firestore.Timestamp.now().toMillis()
-            })
-        return response
+        const { id: _id, ...data } = game
+        return setDoc(doc(getFirestore(), gamesPath, id), {
+            ...data,
+            created: Timestamp.now().toMillis(),
+            updated: Timestamp.now().toMillis()
+        })
     },
     updateGame: async function (game, id) {
-        delete game.id
-        const response = await firestore()
-            .collection(`users/${this.uid}/games`)
-            .doc(id)
-            .update({
-                ...game,
-                updated: firestore.Timestamp.now().toMillis()
-            })
-        return response
+        const { id: _id, ...data } = game
+        return updateDoc(doc(getFirestore(), gamesPath, id), {
+            ...data,
+            updated: Timestamp.now().toMillis()
+        })
     },
     deleteGame: async function (id) {
-        const response = await firestore()
-            .collection(`users/${this.uid}/games`)
-            .doc(id)
-            .delete()
-        return response
+        return deleteDoc(doc(getFirestore(), gamesPath, id))
     },
-    listenGamesChange: async function (onChange) {
-        return firestore()
-            .collection(`users/${this.uid}/games`)
-            .onSnapshot(querySnapshot => {
-                if (!querySnapshot) return
-                let listGames = []
-                querySnapshot.forEach(documentSnapshot => {
-                    console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
-                    listGames.push({ ...documentSnapshot.data(), id: documentSnapshot.id })
-                });
-                listGames = orderBy(listGames, ["updated"], ['desc'])
-                onChange && onChange(listGames)
+    listenGamesChange: function (onChange) {
+        return onSnapshot(collection(getFirestore(), gamesPath), querySnapshot => {
+            if (!querySnapshot) return
+            let listGames = []
+            querySnapshot.forEach(documentSnapshot => {
+                listGames.push({ ...documentSnapshot.data(), id: documentSnapshot.id })
             });
+            listGames = orderBy(listGames, ["updated"], ['desc'])
+            onChange && onChange(listGames)
+        }, e => console.error("listen games error:", e));
     },
-    listenGameChange: async function (id, onChange) {
-        return firestore()
-            .collection(`users/${this.uid}/games`)
-            .doc(id)
-            .onSnapshot(querySnapshot => {
-                if (!querySnapshot) return
-                onChange && onChange({ ...querySnapshot.data(), id: querySnapshot.id })
-            });
+    listenGameChange: function (id, onChange) {
+        return onSnapshot(doc(getFirestore(), gamesPath, id), documentSnapshot => {
+            if (!documentSnapshot?.exists()) return
+            onChange && onChange({ ...documentSnapshot.data(), id: documentSnapshot.id })
+        }, e => console.error("listen game error:", e));
     }
 }
 

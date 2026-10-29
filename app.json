@@ -1,4 +1,10 @@
 {
   "name": "casino",
-  "displayName": "casino"
+  "displayName": "casino",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-3940256099942544~3347511713",
+    "ios_app_id": "ca-app-pub-3940256099942544~1458002511",
+    "delay_app_measurement_init": true,
+    "user_tracking_usage_description": "Thông tin này giúp hiển thị quảng cáo phù hợp hơn với bạn."
+  }
 }

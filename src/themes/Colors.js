@@ -11,7 +11,6 @@ export const Colors = {
   POPUP_BACKGROUND: '#282A35',
   black: '#000',
   white: '#fff',
-  backgroundScreen: '#141414',
   blackAlpha: '#00000069',
   price: '#ffb813',
   gray: '#FAFAFA',

@@ -6,7 +6,7 @@ import {
 import { Keyboard, StyleSheet } from 'react-native';
 import Toast from 'react-native-root-toast';
 import DialogGlobal from '../components/element/DialogGlobal';
-import isString from 'lodash.isstring';
+import { isString } from 'lodash';
 
 let timeoutVar = null;
 

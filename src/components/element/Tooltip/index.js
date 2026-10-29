@@ -20,9 +20,9 @@ export default class Tooltip extends BaseElement {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.visible !== this.props.visible) {
-      this.setStateSafe({ visible: nextProps.visible })
+  componentDidUpdate(prevProps) {
+    if (prevProps.visible !== this.props.visible) {
+      this.setStateSafe({ visible: this.props.visible })
     }
   }
 

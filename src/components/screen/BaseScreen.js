@@ -15,14 +15,14 @@ export default class BaseScreen extends BaseComponent {
 
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     this._componentDidMount && this._componentDidMount();
   }
 
-  onBackPress = () => { };
+  onBackPress = () => false;
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+    this.backHandler?.remove();
     this.mounted = false;
     this._componentWillUnmount && this._componentWillUnmount();
   }

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, PermissionsAndroid, Platform, StyleSheet, View } from 'react-native';
 import SVGIcon from '../../../../assets/SVGIcon';
 import FireStoreModule from '../../../modules/FireStoreModule';
+import AdsModule from '../../../modules/AdsModule';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
 import NavigationService from '../../../navigation/NavigationService';
-import remoteConfig from '@react-native-firebase/remote-config';
-import messaging from '@react-native-firebase/messaging';
+import { fetchAndActivate, getRemoteConfig, getValue } from '@react-native-firebase/remote-config';
+import { AuthorizationStatus, getMessaging, getToken, requestPermission } from '@react-native-firebase/messaging';
 
 import { Images } from '../../../themes/Images';
 import { widthDevice } from '../../../utils/DeviceUtil';
@@ -21,38 +22,47 @@ class SplashScreen extends BaseScreen {
   }
 
   async requestUserPermission() {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-    if (enabled) {
-      messaging()
-        .getToken()
-        .catch(e => {
-          console.error(e)
-        })
+    try {
+      if (Platform.OS === 'android') {
+        if (Platform.Version >= 33) {
+          await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS)
+        }
+      } else {
+        const authStatus = await requestPermission(getMessaging());
+        const enabled =
+          authStatus === AuthorizationStatus.AUTHORIZED ||
+          authStatus === AuthorizationStatus.PROVISIONAL;
+        if (!enabled) return
+      }
+      await getToken(getMessaging())
+    } catch (e) {
+      console.error(e)
     }
   }
 
-  _componentDidMount() {
-    this.requestUserPermission()
-    remoteConfig().setConfigSettings({
-      minimumFetchIntervalMillis: 7200000,
-    });
-    remoteConfig().fetchAndActivate().then((success) => {
-      const welcome_message = remoteConfig().getValue('welcome_message').asString();
+  async loadWelcomeMessage() {
+    try {
+      const remoteConfig = getRemoteConfig()
+      remoteConfig.settings = {
+        minimumFetchIntervalMillis: 7200000,
+      }
+      await fetchAndActivate(remoteConfig)
+      const welcome_message = getValue(remoteConfig, 'welcome_message').asString();
       this.setStateSafe({ welcome_message })
-      const delayPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve("success")
-        }, 3000)
-      })
-      return Promise.all([delayPromise,
-        FireStoreModule.auth()
-      ])
-    }).then(() => {
-      NavigationService.getInstance().reset({ routerName: ROUTER_NAME.HOME.name })
-    });
+    } catch (e) {
+      console.error("remote config error:", e)
+    }
+  }
+
+  async _componentDidMount() {
+    this.requestUserPermission().finally(() => AdsModule.init())
+    const delayPromise = new Promise(resolve => setTimeout(resolve, 3000))
+    await Promise.all([
+      delayPromise,
+      this.loadWelcomeMessage(),
+      FireStoreModule.auth()
+    ])
+    NavigationService.getInstance().reset({ routerName: ROUTER_NAME.HOME.name })
   }
 
   renderContent() {

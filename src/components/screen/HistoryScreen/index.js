@@ -1,173 +1,105 @@
 import React from 'react';
-import { FlatList, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Images } from '../../../themes/Images';
 import { widthDevice } from '../../../utils/DeviceUtil';
 import { Colors } from '../../../themes/Colors';
 import CustomText from '../../common/Text';
-import SVGIcon from '../../../../assets/SVGIcon';
-import KeyboardScrollView from '../../element/KeyboardScrollView';
-import { Row, Table } from 'react-native-table-component';
 import BaseElement from '../../element/BaseElement';
 import { trim } from 'lodash';
 
 class HistoryScreen extends BaseElement {
   constructor(props) {
     super(props);
-    this.width = (widthDevice - 2) / this.props.game.members.length
-    if (this.width < (widthDevice - 2) / 5) {
-      this.width = (widthDevice - 2) / 5 - 4
-    }
-    this.state = {
-      widthArr: this.props.game.members.map(() => this.width)
-    };
     this.displayName = 'HistoryScreen';
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const nextGame = nextProps?.game
-    const game = this.props?.game
-    if (nextGame?.members > game?.members) {
-      this.width = (widthDevice - 2) / this.props.game.members.length
-      if (this.width < (widthDevice - 2) / 5) {
-        this.width = (widthDevice - 2) / 5 - 4
-      }
-      this.setStateSafe({
-        widthArr: nextGame?.members?.map(() => this.width)
-      });
+  getCellWidth = () => {
+    const width = (widthDevice - 2) / (this.props.game?.members?.length || 1)
+    if (width < (widthDevice - 2) / 5) {
+      return (widthDevice - 2) / 5 - 4
     }
+    return width
   }
 
-  getTableHead = () => {
-    return this.props?.game?.members.map((name, index) => {
-      let sum = 0
-      for (const match of this.props?.game?.matches) {
-        sum += (match[name] || 0)
-      }
-      return <View
-        style={styles.tableHead}>
-        <CustomText
-          numberOfLines={1}
-          size={10}>
-          {trim(name)}
-        </CustomText>
-        <CustomText
-          size={12}>
-          {sum}
-        </CustomText>
+  renderTableHead = (cellWidth) => {
+    const { members, matches } = this.props.game
+    return (
+      <View style={[styles.row, styles.headRow]}>
+        {members.map(name => {
+          let sum = 0
+          for (const match of matches || []) {
+            sum += (match[name] || 0)
+          }
+          return (
+            <View
+              key={name}
+              style={[styles.cell, styles.tableHead, { width: cellWidth }]}>
+              <CustomText
+                numberOfLines={1}
+                size={10}>
+                {trim(name)}
+              </CustomText>
+              <CustomText
+                size={12}>
+                {sum}
+              </CustomText>
+            </View>
+          )
+        })}
       </View>
-    })
+    )
   }
 
-  getTableData = () => {
-    return this.props.game.matches.map((match) => {
-      return this.props.game.members.map(member => {
-        if (Object.hasOwnProperty.call(match, member)) {
-          return match[member]
-        }
-        return 0
-      }).map(score => {
-        let color = Colors.white
-        if (score > 0) {
-          color = Colors.green
-        }
-        if (score < 0) {
-          color = "red"
-        }
-        return <CustomText
-          style={{
-            textAlign: "center",
-            color
-          }}
-          size={10}>
-          {score || "-"}
-        </CustomText>
-      })
-    })
-  }
-
-  _componentDidMount() {
-  }
-
-  renderList = () => {
-    return <KeyboardScrollView
-      style={{
-        flex: 1,
-      }}>
-      <FlatList
-        bounces={false}
-        data={[{}, {}, {}, {}, {}, {}]}
-        style={styles.list}
-        renderItem={this.renderItem}
-      />
-    </KeyboardScrollView>
-  }
-
-  renderFooter = () => {
-    return (<View
-      style={styles.footerContainer}>
+  renderTableRow = (match, index, cellWidth) => {
+    return (
       <View
-        style={styles.footerButtonContainer}>
-        <Pressable
-          hitSlop={24}>
-          <SVGIcon.ticked width={32} height={32} />
-        </Pressable>
+        key={index}
+        style={[styles.row, {
+          height: 28,
+          backgroundColor: index % 2 ? Colors.kode : Colors.TRANSPARENT,
+        }]}>
+        {this.props.game.members.map(member => {
+          const score = match[member] || 0
+          let color = Colors.white
+          if (score > 0) {
+            color = Colors.green
+          }
+          if (score < 0) {
+            color = "red"
+          }
+          return (
+            <View
+              key={member}
+              style={[styles.cell, { width: cellWidth }]}>
+              <CustomText
+                style={{
+                  textAlign: "center",
+                  color
+                }}
+                size={10}>
+                {score || "-"}
+              </CustomText>
+            </View>
+          )
+        })}
       </View>
-      <View
-        style={styles.footerButtonContainer}>
-        <Pressable
-          hitSlop={24}>
-          <SVGIcon.cancel width={32} height={32} />
-        </Pressable>
-      </View>
-    </View>)
+    )
   }
 
   renderTable = () => {
-    console.log("gamee", this.props.game)
-
-    const { widthArr } = this.state
+    const cellWidth = this.getCellWidth()
     return (
       <ScrollView
+        style={{ flex: 1 }}
         bounces={false}
         horizontal>
         <View>
-          <Table borderStyle={styles.borderStyle}>
-            <Row
-              data={this.getTableHead()}
-              widthArr={widthArr}
-              style={{ height: 60 }}
-              textStyle={{
-                fontSize: 12,
-                color: Colors.white,
-                textAlign: "center"
-              }} />
-          </Table>
+          {this.renderTableHead(cellWidth)}
           <ScrollView
-            bounces={false}
-            style={styles.dataWrapper}>
-            <Table borderStyle={styles.borderStyle}>
-              {
-                this.getTableData().map((rowData, index) => {
-                  return (
-                    <Row
-                      key={index}
-                      data={rowData}
-                      widthArr={widthArr}
-                      style={{
-                        height: 28,
-                        backgroundColor: index % 2 ? Colors.kode : Colors.TRANSPARENT,
-                      }}
-                      textStyle={{
-                        textAlign: 'center',
-                        color: rowData > 0 ? Colors.green : "red",
-                        fontSize: 12
-                      }}
-                    />
-                  )
-                })
-              }
-            </Table>
+            style={{ flex: 1 }}
+            bounces={false}>
+            {(this.props.game.matches || []).map((match, index) => this.renderTableRow(match, index, cellWidth))}
           </ScrollView>
         </View>
       </ScrollView>
@@ -198,12 +130,20 @@ class HistoryScreen extends BaseElement {
 }
 
 const styles = StyleSheet.create({
-  tableHead: {
-    flex: 1,
+  row: {
+    flexDirection: 'row',
+  },
+  headRow: {
+    height: 60,
+  },
+  cell: {
     justifyContent: "center",
+    borderWidth: 0.5,
+    borderColor: Colors.paleGrey,
+  },
+  tableHead: {
     alignItems: 'center'
   },
-  borderStyle: { borderWidth: 1, borderColor: Colors.paleGrey },
   subTitle: {
     color: Colors.white,
     textAlign: "center",

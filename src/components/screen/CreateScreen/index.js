@@ -1,8 +1,8 @@
 import React from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Images } from '../../../themes/Images';
-import { widthDevice } from '../../../utils/DeviceUtil';
+import { insets, widthDevice } from '../../../utils/DeviceUtil';
 import { Colors } from '../../../themes/Colors';
 import SVGIcon from '../../../../assets/SVGIcon';
 import BaseScreen from '../BaseScreen';
@@ -11,9 +11,7 @@ import CustomText from '../../common/Text';
 import Input from '../../common/Input';
 import moment from 'moment';
 import { includes, size, trim, uniq } from 'lodash';
-import TagInput from 'react-native-tags-input';
-import 'react-native-get-random-values';
-
+import TagInput from '../../common/TagInput';
 import { v4 as uuidv4 } from 'uuid';
 import NavigationService from '../../../navigation/NavigationService';
 import { ROUTER_NAME } from '../../../navigation/NavigationConst';
@@ -37,7 +35,7 @@ class CreateScreen extends BaseScreen {
       name: moment().format("DD/MM/YYYY HH:mm"),
       tags: {
         tag: '',
-        tagsArray: this.game?.members || [],
+        tagsArray: [...(this.game?.members || [])],
       },
       listName: []
     };
@@ -45,7 +43,11 @@ class CreateScreen extends BaseScreen {
 
   _componentDidMount() {
     LocalStorage.getItem(LocalStorage.DEFINE_KEY.LIST_NAME).then(listName => {
-      this.setStateSafe({ listName: JSON.parse(listName) || [] })
+      try {
+        this.setStateSafe({ listName: (listName && JSON.parse(listName)) || [] })
+      } catch (e) {
+        this.setStateSafe({ listName: [] })
+      }
     })
   }
 
@@ -99,6 +101,7 @@ class CreateScreen extends BaseScreen {
       }
     } catch (e) {
       console.error("create game error:", e)
+      NavigationService.getInstance().showToast({ message: "Có lỗi xảy ra, vui lòng thử lại" })
     }
     LoadingManager.getInstance().visibleLoading(false)
   }
@@ -164,14 +167,11 @@ class CreateScreen extends BaseScreen {
         style={styles.suggestionContentContainer}>
         {this.state.listName.map(item => {
           return (<Pressable
-            onPress={() => {
-              this.setStateSafe({
-                tags: {
-                  ...this.state.tags,
-                  tagsArray: uniq([...(this.state.tags?.tagsArray || []), item])
-                }
-              })
-            }}
+            key={item}
+            onPress={() => this.updateTagState({
+              ...this.state.tags,
+              tagsArray: uniq([...(this.state.tags?.tagsArray || []), item])
+            })}
             style={styles.suggestionTag}>
             <CustomText
               numberOfLines={1}
@@ -410,7 +410,8 @@ const styles = StyleSheet.create({
   },
   bottom: {
     flexDirection: "row",
-    paddingVertical: 32,
+    paddingTop: 32,
+    paddingBottom: 32 + insets.bottom,
     paddingRight: 24,
     paddingLeft: 22,
     position: 'absolute',

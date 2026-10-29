@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import BaseComponent from '../BaseComponent';
 
 export default class BaseElement extends BaseComponent {
@@ -19,7 +18,3 @@ export default class BaseElement extends BaseComponent {
     return null;
   }
 }
-
-BaseElement.contextTypes = {
-  displayScreen: PropTypes.string,
-};

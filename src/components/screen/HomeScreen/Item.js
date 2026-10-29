@@ -1,10 +1,10 @@
 import React from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, Share, StyleSheet, View } from 'react-native';
 import { Colors } from '../../../themes/Colors';
 import CustomText from '../../common/Text';
 import SVGIcon from '../../../../assets/SVGIcon';
 import BaseElement from '../../element/BaseElement';
-import { trim } from 'lodash';
+import { orderBy, trim } from 'lodash';
 import { Images } from '../../../themes/Images';
 import { widthDevice } from '../../../utils/DeviceUtil';
 import Modal from 'react-native-modal';
@@ -19,6 +19,22 @@ class Item extends BaseElement {
             isEdit: false,
             isDeleteVisible: false
         };
+    }
+
+    shareGame = () => {
+        const { name, members, matches } = this.props.item
+        const listScore = orderBy(members.map(member => {
+            let sum = 0
+            for (const match of matches || []) {
+                sum += (match[member] || 0)
+            }
+            return { member, sum }
+        }), ['sum'], ['desc'])
+        const message = [
+            trim(name),
+            ...listScore.map((it, index) => `${index + 1}. ${trim(it.member)}: ${it.sum > 0 ? "+" : ""}${it.sum}`)
+        ].join("\n")
+        Share.share({ message }).catch(e => console.log("share error:", e))
     }
 
     renderEdit = () => {
@@ -60,6 +76,7 @@ class Item extends BaseElement {
                 </CustomText>
             </Pressable>
             <Pressable
+                onPress={this.shareGame}
                 style={styles.share}>
                 <SVGIcon.beer width={24} height={24} />
                 <CustomText
@@ -120,7 +137,6 @@ class Item extends BaseElement {
                         {
                             flex: 1,
                             margin: 0,
-                            width: widthDevice,
                             alignSelf: 'center',
                             width: 300
                         },
@@ -198,7 +214,10 @@ class Item extends BaseElement {
                             <View
                                 style={styles.border} />
                             <Pressable
-                                onPress={() => FireStoreModule.deleteGame(id)}
+                                onPress={() => {
+                                    this.setStateSafe({ isDeleteVisible: false })
+                                    FireStoreModule.deleteGame(id).catch(e => console.error("delete game error:", e))
+                                }}
                                 style={styles.bottomROw}>
                                 <SVGIcon.ticked width={24} height={24} />
                                 <CustomText

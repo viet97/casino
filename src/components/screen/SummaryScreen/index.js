@@ -40,7 +40,7 @@ class SummaryScreen extends BaseElement {
     const { game } = this.props
     return orderBy(game?.members.map((name, index) => {
       let sum = 0
-      for (const match of this.props?.game?.matches) {
+      for (const match of this.props?.game?.matches || []) {
         sum += (match[name] || 0)
       }
       return { name, sum }
@@ -51,7 +51,7 @@ class SummaryScreen extends BaseElement {
     const { game } = this.props
     let listScore = orderBy(game?.members.map((name, index) => {
       let sum = 0
-      for (const match of this.props?.game?.matches) {
+      for (const match of this.props?.game?.matches || []) {
         sum += (match[name] || 0)
       }
       return { name, sum }

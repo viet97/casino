@@ -4,7 +4,7 @@ import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 import BaseScreen from '../BaseScreen';
 import { Colors } from '../../../themes/Colors';
 import { Images } from '../../../themes/Images';
-import { widthDevice } from '../../../utils/DeviceUtil';
+import { insets, widthDevice } from '../../../utils/DeviceUtil';
 import CustomText from '../../common/Text';
 import SVGIcon from '../../../../assets/SVGIcon';
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,6 +14,7 @@ import FireStoreModule from '../../../modules/FireStoreModule';
 import Item from './Item';
 import Tooltip from '../../element/Tooltip';
 import LocalStorage, { DEFINE_KEY } from '../../../modules/LocalStorage';
+import Banner from '../../element/Banner';
 
 const COVER_HEIGHT = widthDevice * 260 / 393
 
@@ -86,6 +87,7 @@ class HomeScreen extends BaseScreen {
             </CustomText>
           </Pressable>
         </Tooltip>
+        <Banner style={styles.banner} />
       </LinearGradient>
     )
   }
@@ -98,12 +100,12 @@ class HomeScreen extends BaseScreen {
         }, 500);
       }
     })
-    this.gamesListener = await FireStoreModule.listenGamesChange(listGame => {
+    this.gamesListener = FireStoreModule.listenGamesChange(listGame => {
       this.setStateSafe({ listGame })
     })
   }
 
-  _componentUnMount() {
+  _componentWillUnmount() {
     this.gamesListener && this.gamesListener()
 
   }
@@ -144,7 +146,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover"
   },
   createGameButton: {
-    flex: 1,
     height: 52,
     flexDirection: 'row',
     alignItems: 'center',
@@ -152,12 +153,16 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: Colors.skema,
     overflow: 'hidden',
-    width: '100%',
     width: widthDevice - 46
   },
+  banner: {
+    marginTop: 16,
+    marginLeft: -22,
+    width: widthDevice,
+  },
   bottom: {
-    flexDirection: "row",
-    paddingVertical: 32,
+    paddingTop: 32,
+    paddingBottom: 16 + insets.bottom,
     paddingRight: 24,
     paddingLeft: 22,
     position: 'absolute',
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
   },
   listContentContainer: {
     paddingTop: COVER_HEIGHT - 32,
-    paddingBottom: 100
+    paddingBottom: 200
   },
   title: {
     color: Colors.white,

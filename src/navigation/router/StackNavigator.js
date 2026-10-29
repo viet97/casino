@@ -1,20 +1,16 @@
 import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ROUTER_NAME } from '../NavigationConst';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
   return (
     <Stack.Navigator
-      headerMode={'none'}
-      mode={'card'}
       screenOptions={{
-        header: null,
-        cardOverlayEnabled: true,
-        cardShadowEnabled: false,
-        animationEnabled: true,
-        gestureDirection: 'horizontal',
+        headerShown: false,
+        animation: 'slide_from_right',
+        gestureEnabled: true,
       }}
       initialRouteName={ROUTER_NAME.SPLASH.name}>
       {Object.values(ROUTER_NAME).map(screen => {

@@ -1,37 +1,10 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { AppStack } from './router/StackNavigator';
-import RNExitApp from 'react-native-exit-app';
 
 import NavigationService from './NavigationService';
 import BaseElement from '../components/element/BaseElement';
-import { IS_ANDROID } from '../utils/DeviceUtil';
 import { EmitterManager } from '../modules/EmitterManager';
-
-let isBack = false,
-  timeoutVar = null;
-export const navigationRef = null
-export const checkDoublePress = () => {
-  NavigationService.getInstance().showToast({
-    message: '',
-  });
-  if (!isBack) {
-    isBack = true;
-    const backFunc = () => {
-      isBack = false;
-    };
-    if (timeoutVar) {
-      clearTimeout(timeoutVar);
-      timeoutVar = null;
-    }
-    timeoutVar = setTimeout(backFunc, 2000);
-    return true;
-  }
-  if (IS_ANDROID) {
-    RNExitApp.exitApp();
-  }
-  return false;
-};
 
 class AppNavigator extends BaseElement {
   constructor(props) {

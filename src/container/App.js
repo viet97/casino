@@ -9,9 +9,8 @@ import { EmitterManager } from '../modules/EmitterManager';
 import Loading from '../components/element/Loading';
 import DialogGlobal from '../components/element/DialogGlobal';
 
-import { RootSiblingParent, setSiblingWrapper } from 'react-native-root-siblings';
-import OrientationModule from '../modules/OrientationModule';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { RootSiblingParent } from 'react-native-root-siblings';
+import { SafeAreaProvider, SafeAreaView, initialWindowMetrics } from 'react-native-safe-area-context';
 import NavigationService from '../navigation/NavigationService';
 import LoadingManager from '../components/element/Loading/LoadingManager';
 import Config from '../Config';
@@ -21,17 +20,9 @@ import AppStateModule from '../modules/AppStateModule';
 LogBox.ignoreAllLogs();
 
 class AppContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    setSiblingWrapper((sibling) => (
-      <View>{sibling}</View>
-    ));
-  }
-
   componentDidMount() {
     StatusBar.setHidden(false);
-    OrientationModule.lockToPortrait();
-    AppState.addEventListener('change', state => {
+    this.appStateSubscription = AppState.addEventListener('change', state => {
       if (state !== AppStateModule.appState) {
         AppStateModule.previousAppState = AppStateModule.appState;
         AppStateModule.appState = state;
@@ -46,10 +37,10 @@ class AppContainer extends React.Component {
         }
       }
     });
-
   }
 
   componentWillUnmount() {
+    this.appStateSubscription?.remove();
     if (Config.buildRelease) {
       EmitterManager.clear();
       DialogGlobal.clear();
@@ -60,32 +51,22 @@ class AppContainer extends React.Component {
 
   render() {
     return (
-      <RootSiblingParent>
-        <SafeAreaView edges={['right', 'left']} style={{ flex: 1, backgroundColor: Colors.white }}>
-          <SafeAreaProvider>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <RootSiblingParent>
+          <SafeAreaView edges={['right', 'left']} style={{ flex: 1, backgroundColor: Colors.blackRussian }}>
             <StatusBar
               hidden={false}
               barStyle={'light-content'}
               translucent={true}
-              backgroundColor={Colors.STATUS_BAR_COLOR}
+              backgroundColor={Colors.TRANSPARENT}
             />
             <AppNavigation />
             <Loading />
-          </SafeAreaProvider>
-        </SafeAreaView>
-      </RootSiblingParent>
+          </SafeAreaView>
+        </RootSiblingParent>
+      </SafeAreaProvider>
     );
   }
 }
 
-let MyAppContainer = AppContainer;
-// if (Config.useCodePush) {
-//   const AppInfoManager = require('../AppInfoManager').default;
-//   let codePushOptions = {
-//     checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
-//     deploymentKey: AppInfoManager.getInstance().getDeploymentKey(),
-//   };
-//   MyAppContainer = codePush(codePushOptions)(AppContainer);
-// }
-
-export default MyAppContainer;
+export default AppContainer;
