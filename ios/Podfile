@@ -8,9 +8,19 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-# React Native Firebase requires static frameworks
-$RNFirebaseAsStaticFramework = true
-use_frameworks! :linkage => :static
+# Firebase iOS SDK 13+ is SPM-only; RNFirebase requires dynamic linkage with SPM
+use_frameworks! :linkage => :dynamic
+
+# Google Mobile Ads / UMP ship static binaries, so their RN wrapper must be static too
+pre_install do |installer|
+  installer.pod_targets.each do |pod|
+    if pod.name == 'RNGoogleMobileAds'
+      def pod.build_type
+        Pod::BuildType.static_framework
+      end
+    end
+  end
+end
 
 target 'casino' do
   config = use_native_modules!
@@ -28,5 +38,14 @@ target 'casino' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # Xcode 27 only supports deployment targets >= 15.0; some pods still declare older ones
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |build_config|
+        if build_config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < min_ios_version_supported.to_f
+          build_config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = min_ios_version_supported
+        end
+      end
+    end
   end
 end

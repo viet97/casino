@@ -16,7 +16,6 @@ export const insets = initialWindowMetrics?.insets || {
 };
 
 const { width, height } = Dimensions.get('screen');
-export const widthDevice = width < height ? width : height;
 export const heightDevice = width > height ? width : height;
 
 const width_window = Dimensions.get('window').width;
@@ -25,6 +24,8 @@ export const widthWindow =
   width_window < height_window ? width_window : height_window;
 export const heightWindow =
   width_window > height_window ? width_window : height_window;
+// Layout width = app window minus the left/right safe area that App's SafeAreaView pads out
+export const widthDevice = widthWindow - insets.left - insets.right;
 
 export const IS_TABLET = RNDeviceInfo.isTablet();
 export const DRAWER_WIDTH = IS_TABLET ? widthDevice * 0.5 : widthDevice * 0.7;

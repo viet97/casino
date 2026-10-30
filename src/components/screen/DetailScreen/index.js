@@ -30,6 +30,13 @@ class DetailScreen extends BaseScreen {
   }
 
   _componentDidMount() {
+    // Showing the ad during the push animation fails on Android, wait until it ends
+    this.transitionListener = this.props.navigation?.addListener('transitionEnd', e => {
+      if (e?.data?.closing) return
+      this.transitionListener && this.transitionListener()
+      this.transitionListener = null
+      AdsModule.showInterstitial()
+    })
     this.gameListener = FireStoreModule.listenGameChange(this.props.route?.params?.game?.id, game => {
       this.setStateSafe({ game })
     })
@@ -45,8 +52,8 @@ class DetailScreen extends BaseScreen {
   }
 
   _componentWillUnmount() {
+    this.transitionListener && this.transitionListener()
     this.gameListener && this.gameListener()
-    AdsModule.showInterstitial()
   }
 
   goToTab = (currentTab) => this.setStateSafe({ currentTab })
@@ -107,6 +114,7 @@ class DetailScreen extends BaseScreen {
                   alignItems: 'center',
                   justifyContent: "center",
                   height: '100%',
+                  paddingBottom: insets.bottom,
                   width: widthDevice / 3,
                   backgroundColor: !currentTab ? Colors.violet : Colors.TRANSPARENT
                 }}>
@@ -143,6 +151,7 @@ class DetailScreen extends BaseScreen {
                   alignItems: 'center',
                   justifyContent: "center",
                   height: '100%',
+                  paddingBottom: insets.bottom,
                   width: widthDevice / 3,
                   backgroundColor: currentTab === 1 ? Colors.violet : Colors.TRANSPARENT
                 }}>
@@ -178,6 +187,7 @@ class DetailScreen extends BaseScreen {
                   alignItems: 'center',
                   justifyContent: "center",
                   height: '100%',
+                  paddingBottom: insets.bottom,
                   width: widthDevice / 3,
                   backgroundColor: currentTab === 2 ? Colors.violet : Colors.TRANSPARENT
                 }}>

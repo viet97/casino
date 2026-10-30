@@ -76,12 +76,7 @@ export default class NavigationService {
     }
     const name = isString(routerName) ? routerName : routerName.name;
     Keyboard.dismiss();
-    this.navigation.dispatch(
-      CommonActions.navigate({
-        name: name,
-        params: params,
-      })
-    );
+    this.navigation.dispatch(CommonActions.navigate(name, params));
   }
   goBack({ n = 1 } = { n: 1 }) {
     if (!this._checkNavigation()) {

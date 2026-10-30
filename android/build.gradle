@@ -7,6 +7,17 @@ buildscript {
         ndkVersion = "27.1.12297006"
         kotlinVersion = "2.2.0"
     }
+    // Firebase BoM 35.x (default of RNFB 27) ships firebase-auth compiled with Kotlin 2.4,
+    // which RN 0.88's Kotlin 2.2 can't read. Pin the last 34.x BoM.
+    project.ext {
+        set('react-native', [
+            versions: [
+                firebase: [
+                    bom: "34.19.0",
+                ],
+            ],
+        ])
+    }
     repositories {
         google()
         mavenCentral()

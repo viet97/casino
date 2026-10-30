@@ -91,6 +91,7 @@ class SummaryScreen extends BaseElement {
           const IconLabel = index >= this.listLabel.length ? this.listLabel[this.listLabel.length - 1] : this.listLabel[index]
           return (
             <View
+              key={item.name}
               style={styles.listItem}>
               <View>
                 <IconLabel />
@@ -137,6 +138,7 @@ class SummaryScreen extends BaseElement {
           color = "red"
         }
         return <View
+          key={index}
           style={styles.topItem}>
           <View
             style={styles.topItemContent}>

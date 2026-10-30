@@ -9,8 +9,8 @@ import mobileAds, {
 // Ad unit ids from AdMob console. Leave empty to use Google test ads.
 const AD_UNIT_IDS = {
     ios: {
-        banner: '',
-        interstitial: '',
+        banner: 'ca-app-pub-9474897494973817/1022960055',
+        interstitial: 'ca-app-pub-9474897494973817/8266737242',
     },
     android: {
         banner: '',
@@ -29,13 +29,15 @@ const getUnitId = (type, testId) => {
 
 const AdsModule = {
     isReady: false,
-    lastInterstitialShown: Date.now(),
+    lastInterstitialShown: 0,
     interstitial: null,
     isInterstitialLoaded: false,
+    isShowingInterstitial: false,
     listeners: [],
 
     bannerUnitId: getUnitId('banner', TestIds.ADAPTIVE_BANNER),
-    interstitialUnitId: getUnitId('interstitial', TestIds.INTERSTITIAL),
+    // Real unit: create an Interstitial unit in AdMob with "Video" ad type allowed
+    interstitialUnitId: getUnitId('interstitial', TestIds.INTERSTITIAL_VIDEO || TestIds.INTERSTITIAL),
 
     init: async function () {
         try {
@@ -81,6 +83,16 @@ const AdsModule = {
             this.interstitial.addAdEventListener(AdEventType.ERROR, e => {
                 this.isInterstitialLoaded = false
                 console.log("interstitial error:", e)
+                // A failed show consumes the ad, load another one for next time
+                if (this.isShowingInterstitial) {
+                    this.isShowingInterstitial = false
+                    this.interstitial.load()
+                }
+            })
+            // Only count the ad once it is really on screen
+            this.interstitial.addAdEventListener(AdEventType.OPENED, () => {
+                this.isShowingInterstitial = false
+                this.lastInterstitialShown = Date.now()
             })
         }
         this.interstitial.load()
@@ -93,8 +105,8 @@ const AdsModule = {
             return false
         }
         if (Date.now() - this.lastInterstitialShown < INTERSTITIAL_INTERVAL) return false
-        this.lastInterstitialShown = Date.now()
         this.isInterstitialLoaded = false
+        this.isShowingInterstitial = true
         this.interstitial.show().catch(e => console.log("show interstitial error:", e))
         return true
     },

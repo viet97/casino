@@ -14,7 +14,6 @@ import FireStoreModule from '../../../modules/FireStoreModule';
 import Item from './Item';
 import Tooltip from '../../element/Tooltip';
 import LocalStorage, { DEFINE_KEY } from '../../../modules/LocalStorage';
-import Banner from '../../element/Banner';
 
 const COVER_HEIGHT = widthDevice * 260 / 393
 
@@ -87,7 +86,6 @@ class HomeScreen extends BaseScreen {
             </CustomText>
           </Pressable>
         </Tooltip>
-        <Banner style={styles.banner} />
       </LinearGradient>
     )
   }
@@ -155,14 +153,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     width: widthDevice - 46
   },
-  banner: {
-    marginTop: 16,
-    marginLeft: -22,
-    width: widthDevice,
-  },
   bottom: {
-    paddingTop: 32,
-    paddingBottom: 16 + insets.bottom,
+    paddingVertical: 32,
+    paddingBottom: 32 + insets.bottom,
     paddingRight: 24,
     paddingLeft: 22,
     position: 'absolute',
@@ -181,7 +174,7 @@ const styles = StyleSheet.create({
   },
   listContentContainer: {
     paddingTop: COVER_HEIGHT - 32,
-    paddingBottom: 200
+    paddingBottom: 100 + insets.bottom
   },
   title: {
     color: Colors.white,
