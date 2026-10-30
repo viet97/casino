@@ -136,4 +136,6 @@
   - AdMob: đã tạo IDFA explainer; GDPR message đang tạo (khuyên hiện nút "Không đồng ý").
   - User còn phải làm trên App Store Connect: tạo version 1.2.0, chọn build 5, cập nhật App Privacy (quảng cáo bên thứ ba: Device ID, Usage Data, Diagnostics), Marketing URL `https://casino-ledger.web.app`, rồi gửi duyệt.
 - **Build 5 bị Apple báo lỗi 90683** (thiếu NSPhotoLibraryUsageDescription; thư viện share có tham chiếu API ảnh). Đã thêm `NSPhotoLibraryUsageDescription` và `NSPhotoLibraryAddUsageDescription` (tiếng Việt) vào Info.plist, nâng lên **build 6** và upload thành công 30/10. Trên ASC chọn build 1.2.0 (6).
+- **30/10: user đã gửi iOS 1.2.0 (6) cho Apple duyệt.** Bảng tuổi: Age Assurance = No, Advertising = Yes. Chờ Apple trả kết quả; nếu bị reject thì đọc lý do và sửa.
+- Tiếp theo: Android. Cần App ID Android, ad unit banner và interstitial (ảnh + video). Cần nâng versionCode/versionName (đang 2 / 1.1.0) trước khi build AAB release.
 
