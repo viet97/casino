@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import BaseCommon from '../BaseCommon';
 import { Colors } from '../../../themes/Colors';
+import { FONT_SCALE } from '../../../utils/DeviceUtil';
 
 class CustomText extends BaseCommon {
   constructor(props) {
@@ -24,8 +25,15 @@ class CustomText extends BaseCommon {
       staticStyle.color = color;
     }
     const fontFamily = "FVF Fernando 08";
-    staticStyle.fontSize = size;
+    staticStyle.fontSize = size * FONT_SCALE;
     staticStyle.fontFamily = fontFamily;
+    if (FONT_SCALE !== 1) {
+      // Keep custom line heights in proportion so bigger text is not clipped
+      const lineHeight = StyleSheet.flatten(style)?.lineHeight;
+      if (lineHeight) {
+        staticStyle.lineHeight = lineHeight * FONT_SCALE;
+      }
+    }
     return (
       <Text
         numberOfLines={numberOfLines}

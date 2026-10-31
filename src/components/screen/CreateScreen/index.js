@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Images } from '../../../themes/Images';
-import { insets, widthDevice } from '../../../utils/DeviceUtil';
+import { FONT_SCALE, insets, widthDevice } from '../../../utils/DeviceUtil';
 import { Colors } from '../../../themes/Colors';
 import SVGIcon from '../../../../assets/SVGIcon';
 import BaseScreen from '../BaseScreen';
@@ -316,13 +316,13 @@ const styles = StyleSheet.create({
   },
   tagInput: {
     marginTop: 2,
-    height: 30,
+    height: 30 * FONT_SCALE,
     letterSpacing: 0.05,
     color: Colors.white,
     width: '100%',
-    fontSize: 14,
+    fontSize: 14 * FONT_SCALE,
     fontFamily: "FVF Fernando 08",
-    lineHeight: 30,
+    lineHeight: 30 * FONT_SCALE,
     padding: 0,
   },
   tagInputContainer: {

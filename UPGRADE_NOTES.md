@@ -138,4 +138,10 @@
 - **Build 5 bị Apple báo lỗi 90683** (thiếu NSPhotoLibraryUsageDescription; thư viện share có tham chiếu API ảnh). Đã thêm `NSPhotoLibraryUsageDescription` và `NSPhotoLibraryAddUsageDescription` (tiếng Việt) vào Info.plist, nâng lên **build 6** và upload thành công 30/10. Trên ASC chọn build 1.2.0 (6).
 - **30/10: user đã gửi iOS 1.2.0 (6) cho Apple duyệt.** Bảng tuổi: Age Assurance = No, Advertising = Yes. Chờ Apple trả kết quả; nếu bị reject thì đọc lý do và sửa.
 - Tiếp theo: Android. Cần App ID Android, ad unit banner và interstitial (ảnh + video). Cần nâng versionCode/versionName (đang 2 / 1.1.0) trước khi build AAB release.
+- **31/10: Apple báo Guideline 4 (Design) cho build 6:** app "not optimized for iPad". Khi chỉ hỗ trợ iPhone, app chạy trên iPad trong khung tương thích nhỏ. Apple cho phép sửa ở bản sau, nhưng đã chọn sửa luôn:
+  - Bật iPad `TARGETED_DEVICE_FAMILY = "1,2"`. `UISupportedInterfaceOrientations~ipad` chỉ còn Portrait và PortraitUpsideDown.
+  - Thêm icon iPad (`iPad_*.png` trong AppIcon.appiconset, sinh từ icon 1024 bằng sips).
+  - `DeviceUtil.FONT_SCALE = IS_TABLET ? 1.3 : 1`. `CustomText` và `Input` nhân fontSize, lineHeight, height theo hệ số này. Ô tag input ở CreateScreen cũng vậy.
+  - Đã test trên simulator iPad Air 11 (M2), iOS 17.4: toàn màn hình, chữ to rõ. Simulator iOS 27.1 trên máy này không tạo được iPad Air M4 hay iPhone 17 Pro Max ("Incompatible device").
+  - Nâng **build 7** để upload lại.
 

@@ -28,6 +28,8 @@ export const heightWindow =
 export const widthDevice = widthWindow - insets.left - insets.right;
 
 export const IS_TABLET = RNDeviceInfo.isTablet();
+// Text is designed for phones, make it bigger on tablets
+export const FONT_SCALE = IS_TABLET ? 1.3 : 1;
 export const DRAWER_WIDTH = IS_TABLET ? widthDevice * 0.5 : widthDevice * 0.7;
 
 export const IS_IPHONE_X =
