@@ -108,9 +108,11 @@ class CreateScreen extends BaseScreen {
 
   renderBottom = () => {
     return (
-      <LinearGradient
-        style={styles.bottom}
-        start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={['#05131C', "rgba(5, 19, 28, 0)"]} >
+      <View style={styles.bottom}>
+        {/* Gradient only as background: wrapping content in it clips the button on iOS (new arch) */}
+        <LinearGradient
+          style={StyleSheet.absoluteFill}
+          start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={['#05131C', "rgba(5, 19, 28, 0)"]} />
         <Pressable
           disabled={!this.isValidate()}
           onPress={this.createGame}
@@ -127,7 +129,7 @@ class CreateScreen extends BaseScreen {
             {this.isEdit ? "Lưu thay đổi" : "Bắt đầu sát phạt"}
           </CustomText>
         </Pressable>
-      </LinearGradient>
+      </View>
     )
   }
 
