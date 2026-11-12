@@ -13,8 +13,8 @@ const AD_UNIT_IDS = {
         interstitial: 'ca-app-pub-9474897494973817/8266737242',
     },
     android: {
-        banner: '',
-        interstitial: '',
+        banner: 'ca-app-pub-9474897494973817/4572737535',
+        interstitial: 'ca-app-pub-9474897494973817/6360848968',
     },
 }
 
